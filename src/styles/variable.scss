@@ -1,0 +1,28 @@
+$primary: #1890FF;
+$success: #52C41A;
+$warning: #FAAD15;
+$error: #FF4D4F;
+$info: #1890FF;
+
+$link: #1890FF;
+$text: #ADADAD;
+
+// layout
+$header-height: 50px;
+$border: #141414;
+$body-bg: #000000;
+$module-bg: #141414;
+$module-hover-bg: fade($body-bg, 8%);
+$radius: 2px;
+
+// times
+$transition-time-fast: 0.1s;
+$transition-time-normal: 0.25s;
+$transition-time-slow: 0.38s;
+
+// size
+$line-height: 1;
+
+$font-size-root: 14px;
+$font-size-large: 16px;
+$font-size-small: 12px;
