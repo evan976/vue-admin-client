@@ -115,7 +115,7 @@ export default {
       this.tagData = tagList
       this.$notify({
         type: 'success',
-        title: '成功',
+        title: '数据请求成功',
         message
       })
     },

@@ -5,13 +5,13 @@
         <img src="@/assets/images/logo.svg" alt="logo">
       </div>
       <el-form
-        :model="user"
+        :model="userModel"
         :rules="rules"
         ref="ruleform"
       >
         <el-form-item prop="username">
           <el-input
-            v-model="user.username"
+            v-model="userModel.username"
             class="username"
             size="small"
             prefix-icon="el-icon-user"
@@ -21,7 +21,7 @@
         </el-form-item>
         <el-form-item prop="password">
           <el-input
-            v-model="user.password"
+            v-model="userModel.password"
             class="password"
             size="small"
             type="password"
@@ -53,10 +53,7 @@ export default {
   name: 'Login',
   data () {
     return {
-      user: {
-        username: '',
-        password: ''
-      },
+      userModel: {},
       rules: {
         username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
         password: [{ required: true, message: '密码不能为空', trigger: 'blur' }]
@@ -67,10 +64,10 @@ export default {
     login (formName) {
       this.$refs[formName].validate(async valid => {
         if (!valid) return false
-        const result = await login(this.user)
+        const result = await login(this.userModel)
         if (result.code === -1) {
           this.$notify({
-            title: '失败',
+            title: '操作失败',
             message: result.message,
             type: 'error'
           })
@@ -78,7 +75,7 @@ export default {
           const { token } = result.data
           this.$store.commit('setToken', token)
           this.$notify({
-            title: '成功',
+            title: '操作成功',
             message: result.message,
             type: 'success'
           })

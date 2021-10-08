@@ -32,7 +32,9 @@ import {
   TabPane,
   Notification,
   Dialog,
-  Link
+  Link,
+  Pagination,
+  Tag
 } from 'element-ui'
 
 Vue.use(Container)
@@ -66,6 +68,8 @@ Vue.use(Image)
 Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(Link)
+Vue.use(Pagination)
+Vue.use(Tag)
 
 Dialog.props.lockScroll.default = false
 Vue.use(Dialog)

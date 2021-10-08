@@ -36,7 +36,6 @@ html {
   background-color: $primary;
 }
 
-
 .el-main {
   flex: none;
 }
@@ -61,4 +60,14 @@ html {
 
 .el-link {
   margin: 0 4px;
+}
+
+.el-pagination {
+  float: right;
+  margin: 20px 0;
+}
+
+.el-tag {
+  border-radius: $radius;
+  margin: 5px 5px 5px 0;
 }

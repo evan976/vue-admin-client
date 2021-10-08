@@ -114,7 +114,7 @@ export default {
       this.categoryData = categoryList
       this.$notify({
         type: 'success',
-        title: '成功',
+        title: '数据请求成功',
         message
       })
     },

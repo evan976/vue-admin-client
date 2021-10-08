@@ -10,5 +10,8 @@ export const getCategoryList = () => get('/categories')
 // tag
 export const getTagList = () => get('/tags')
 
+// article
+export const getArticleList = () => get('/articles')
+
 // option
 export const getSiteOptions = () => get('/options')

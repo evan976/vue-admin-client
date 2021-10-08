@@ -148,7 +148,7 @@ export default {
       this.profileModel = user
       this.$notify({
         type: 'success',
-        title: '成功',
+        title: '数据请求成功',
         message
       })
     },

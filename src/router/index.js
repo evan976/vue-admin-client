@@ -14,6 +14,12 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
+  const token = localStorage.getItem('token')
+  if (!token) {
+    if (to.path !== '/login') {
+      return next('/login')
+    }
+  }
   next()
 })
 
