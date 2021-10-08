@@ -1,5 +1,3 @@
-const state = {
+export default {
   token: ''
 }
-
-export default state

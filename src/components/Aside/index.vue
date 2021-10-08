@@ -1,7 +1,7 @@
 <template>
-  <el-aside class="app-aside">
+  <el-aside class="app-aside" width="200px">
     <div class="user-info">
-      <img src="@/assets/gravatar.png" />
+      <img src="@/assets/images/avatar.png" />
       <span>evan</span>
     </div>
     <Menu />
@@ -22,16 +22,15 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/variable.scss';
 .app-aside {
-  width: 200px !important;
   height: 100%;
-  background: #1f1f1f;
+  background: $module-bg;
   .user-info {
     height: 150px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-bottom: 1px solid $module-bg;
+    border-bottom: 1px solid $border;
     img {
       width: 64px;
     }
@@ -39,7 +38,7 @@ export default {
       font-size: 20px;
       font-weight: 500;
       margin: 10px 0;
-      color: #8a8a8a;
+      color: $dark;
     }
   }
 }

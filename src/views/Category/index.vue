@@ -16,34 +16,28 @@
       <el-table-column
         prop="id"
         label="ID"
-        width="100">
+        width="120">
       </el-table-column>
       <el-table-column
         prop="name"
         label="名称"
-        width="120">
+        width="220">
       </el-table-column>
       <el-table-column
         prop="slug"
         label="别名"
-        width="120">
+        width="220">
       </el-table-column>
       <el-table-column
         prop="description"
         label="描述">
       </el-table-column>
       <el-table-column
-        prop="nums"
-        label="文章"
-        width="120"
-      >
-      </el-table-column>
-      <el-table-column
         label="操作"
         width="180">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-          <el-button type="text" size="small">编辑</el-button>
+          <el-button @click="handleClick(scope.row)" type="primary" size="small" icon="el-icon-edit" circle></el-button>
+          <el-button type="danger" size="small" icon="el-icon-delete" circle></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -87,6 +81,8 @@
 </template>
 
 <script>
+import { getCategoryList } from '@/request/api'
+
 export default {
   name: 'Category',
   data () {
@@ -108,7 +104,21 @@ export default {
     }
   },
 
+  created () {
+    this.getCategoryData()
+  },
+
   methods: {
+    async getCategoryData () {
+      const { message, data: { categoryList } } = await getCategoryList()
+      this.categoryData = categoryList
+      this.$notify({
+        type: 'success',
+        title: '成功',
+        message
+      })
+    },
+
     addCategory (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {

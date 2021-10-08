@@ -1,5 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
+import store from '@/store'
+
 
 if (process.env.NODE_ENV === 'development') {
   axios.defaults.baseURL = 'http://localhost:8000/api/private/v1'
@@ -11,23 +13,33 @@ axios.defaults.timeout = 10000
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 
-// TODO: 请求拦截
 axios.interceptors.request.use(
   config => {
+    const token = store.state.token
+    token && (config.headers.Authorization = token)
     return config
   },
-  error => {
-    return Promise.reject(error)
+  err => {
+    return Promise.reject(err)
   }
 )
 
-// TODO: 响应拦截
 axios.interceptors.response.use(
-  response => {
-    return response
+  res => {
+    if (res.status === 200) {
+      return Promise.resolve(res)
+    } else {
+      return Promise.reject(res)
+    }
   },
-  error => {
-    return error
+  err => {
+    if (err.response.status === -1) {
+      this.$notify({
+        title: err.response.data.message,
+        type: 'error'
+      })
+    }
+    return err
   }
 )
 
@@ -42,6 +54,22 @@ export const get = (url, params) => {
 export const post = (url, params) => {
   return new Promise((resolve, reject) => {
     axios.post(url, qs.stringify(params))
+      .then(res => resolve(res.data))
+      .catch(err => reject(err.data))
+  })
+}
+
+export const put = (url, params) => {
+  return new Promise((resolve, reject) => {
+    axios.put(url, qs.stringify(params))
+      .then(res => resolve(res.data))
+      .catch(err => reject(err.data))
+  })
+}
+
+export const remove = url => {
+  return new Promise((resolve, reject) => {
+    axios.delete(url)
       .then(res => resolve(res.data))
       .catch(err => reject(err.data))
   })

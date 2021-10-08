@@ -1,16 +1,23 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import state from './state'
-import * as getters from './getters'
-import mutations from './mutations'
-import actions from './actions'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state,
-  getters,
-  mutations,
-  actions
+  state: {
+    token: getToken() ? getToken() : ''
+  },
+  mutations: {
+    setToken (state, token) {
+      state.token = token
+      setToken(token)
+    },
+
+    removeToken (state) {
+      state.token = ''
+      removeToken()
+    }
+  }
 })

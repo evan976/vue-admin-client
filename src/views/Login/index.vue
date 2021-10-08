@@ -2,7 +2,7 @@
   <div class="login-page">
     <el-card class="login-card">
       <div class="card-header">
-        <img src="@/assets/logo.svg" alt="logo">
+        <img src="@/assets/images/logo.svg" alt="logo">
       </div>
       <el-form
         :model="user"
@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import { login } from '@/request/api'
+
 export default {
   name: 'Login',
   data () {
@@ -63,21 +65,26 @@ export default {
   },
   methods: {
     login (formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
+      this.$refs[formName].validate(async valid => {
+        if (!valid) return false
+        const result = await login(this.user)
+        if (result.code === -1) {
           this.$notify({
-            type: 'success',
-            title: '登录成功',
-            message: '正在跳转到首页...'
+            title: '失败',
+            message: result.message,
+            type: 'error'
+          })
+        } else {
+          const { token } = result.data
+          this.$store.commit('setToken', token)
+          this.$notify({
+            title: '成功',
+            message: result.message,
+            type: 'success'
           })
           setTimeout(() => {
             this.$router.push('/')
           }, 2000)
-        } else {
-          this.$notify({
-            type: 'error',
-            title: '登录失败'
-          })
         }
       })
     }

@@ -31,7 +31,8 @@ import {
   Tabs,
   TabPane,
   Notification,
-  Dialog
+  Dialog,
+  Link
 } from 'element-ui'
 
 Vue.use(Container)
@@ -64,6 +65,7 @@ Vue.use(Upload)
 Vue.use(Image)
 Vue.use(Tabs)
 Vue.use(TabPane)
+Vue.use(Link)
 
 Dialog.props.lockScroll.default = false
 Vue.use(Dialog)

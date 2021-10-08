@@ -12,5 +12,6 @@
   background-color: $module-bg;
   padding: 0 20px;
   font-size: 20px;
+  border-left: 1px solid $border;
 }
 </style>

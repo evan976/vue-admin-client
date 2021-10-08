@@ -203,12 +203,12 @@ export default {
 .upload-thumb {
   width: 100%;
   height: 120px;
-  background-color: #1D1D1D;
   border-radius: 2px;
-  border: 1px dashed #434343;
+  border: 1px dashed $border;
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  transition: all .3s;
 }
 
 .upload-thumb:hover {
@@ -217,7 +217,7 @@ export default {
 
 .avatar-uploader-icon {
   font-size: 20px;
-  color: #8c939d;
+  color: $grey;
   width: 305px;
   height: 120px;
   line-height: 120px;

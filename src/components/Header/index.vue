@@ -1,14 +1,14 @@
 <template>
   <el-header class="app-header">
     <div class="logo">
-      <img src="@/assets/logo.svg" alt="logo" />
+      <img src="@/assets/images/logo.svg" alt="logo" />
       <h3 class="title">BLOG SYSTEM</h3>
     </div>
     <div class="user-info">
       <a href="#">
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
-            <img class="avatar" src="@/assets/gravatar.png" />
+            <img class="avatar" src="@/assets/images/avatar.png" />
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item icon="el-icon-warning-outline">个人信息</el-dropdown-item>
@@ -32,7 +32,7 @@ export default {
   width: 100%;
   height: 60px;
   background: $module-bg;
-  border-bottom: 1px solid #1f1f1f;
+  border-bottom: 1px solid $border;
   .logo {
     height: 60px;
     float: left;

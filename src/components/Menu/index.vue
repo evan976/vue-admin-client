@@ -1,7 +1,7 @@
 <template>
   <el-menu
     router
-    class="menu"
+    style="border: none;"
     :default-active="$route.path"
     :unique-opened="true"
   >
@@ -39,10 +39,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/variable.scss';
-.menu {
-  border: none;
-  background-color: #1f1f1f;
-  color: #fff;
-}
 </style>

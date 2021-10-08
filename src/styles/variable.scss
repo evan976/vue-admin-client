@@ -7,21 +7,15 @@ $info: #1890FF;
 $link: #1890FF;
 $text: #ADADAD;
 
-// layout
-$header-height: 50px;
-$border: #141414;
-$body-bg: #000000;
-$module-bg: #141414;
-$module-hover-bg: fade($body-bg, 8%);
+$white: #FFFFFF;
+$grey: #CCCCCC;
+$dark: #333333;
+$black: #000000;
+
+$border: #F2F4F5;
+$body-bg: #F2F4F5;
+$module-bg: #FFFFFF;
 $radius: 2px;
-
-// times
-$transition-time-fast: 0.1s;
-$transition-time-normal: 0.25s;
-$transition-time-slow: 0.38s;
-
-// size
-$line-height: 1;
 
 $font-size-root: 14px;
 $font-size-large: 16px;
