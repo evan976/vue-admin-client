@@ -44,13 +44,13 @@
         <el-card>
           <el-form>
             <el-form-item label="旧密码" label-width="100px">
-              <el-input size="small" type="password" class="password"></el-input>
+              <el-input size="small" type="password" class="password" show-password></el-input>
             </el-form-item>
             <el-form-item label="新密码" label-width="100px">
-              <el-input size="small" type="password" class="new-password"></el-input>
+              <el-input size="small" type="password" class="new-password" show-password></el-input>
             </el-form-item>
             <el-form-item label="确认密码" label-width="100px">
-              <el-input size="small" type="password" class="rel-new-password"></el-input>
+              <el-input size="small" type="password" class="rel-new-password" show-password></el-input>
             </el-form-item>
             <el-form-item label-width="100px">
               <el-button type="primary" size="small" icon="el-icon-check">更新</el-button>
