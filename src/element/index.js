@@ -29,7 +29,9 @@ import {
   Upload,
   Image,
   Tabs,
-  TabPane
+  TabPane,
+  Notification,
+  Dialog
 } from 'element-ui'
 
 Vue.use(Container)
@@ -62,3 +64,8 @@ Vue.use(Upload)
 Vue.use(Image)
 Vue.use(Tabs)
 Vue.use(TabPane)
+
+Dialog.props.lockScroll.default = false
+Vue.use(Dialog)
+
+Vue.prototype.$notify = Notification

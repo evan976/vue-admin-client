@@ -2,7 +2,15 @@
   <el-card>
     <div slot="header" class="clearfix">
       <span>文章列表</span>
-      <el-button style="float: right;" type="primary" size="mini" icon="el-icon-plus">发表文章</el-button>
+      <el-button
+        style="float: right;"
+        type="primary"
+        size="mini"
+        icon="el-icon-plus"
+        @click="$router.push('/article/edit')"
+      >
+        发表文章
+      </el-button>
     </div>
     <el-table :data="articleData">
       <el-table-column

@@ -5,12 +5,23 @@
         <div slot="header" class="clearfix">
           <span>发表文章</span>
         </div>
-        <el-form label-width="80px">
+        <el-form
+          :model="articleModel"
+          :rules="rules"
+          ref="ruleForm"
+          label-width="80px"
+        >
           <el-form-item label="标题" prop="title">
-            <el-input class="title" size="small" placeholder="文章标题"></el-input>
-          </el-form-item>
-          <el-form-item label="描述" prop="dscription">
             <el-input
+              v-model="articleModel.title"
+              class="title"
+              size="small"
+              placeholder="文章标题"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="描述" prop="description">
+            <el-input
+              v-model="articleModel.description"
               type="textarea"
               :rows="4"
               placeholder="文章描述"
@@ -18,6 +29,7 @@
           </el-form-item>
           <el-form-item label="关键词" prop="keywords">
             <el-select
+              v-model="articleModel.keywords"
               class="keywords"
               size="small"
               multiple
@@ -32,9 +44,16 @@
               size="small"
               class="category"
               placeholder="选择分类"
-            ></el-select>
+            >
+              <el-option
+                v-for="item in categoryData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="内容" prop="content">
+          <el-form-item label="内容">
             <article-content />
           </el-form-item>
         </el-form>
@@ -66,29 +85,43 @@
         <el-input
           size="small"
           placeholder="或者直接输入图片地址"
-          prefix-icon="el-icon-link">
+          prefix-icon="el-icon-link"
+          v-model="articleModel.thumb"
+        >
         </el-input>
       </el-card>
       <el-card class="publish-options">
         <div slot="header" class="clearfix">
           <span>发布选项</span>
         </div>
-        <el-form>
-          <el-form-item label="文章状态">
-            <el-select size="small">
+        <el-form
+          :model="articleModel"
+          :rules="rules"
+          ref="ruleForm"
+        >
+          <el-form-item label="文章状态" prop="state">
+            <el-select size="small" v-model="articleModel.state">
               <el-option label="草稿" value="draft"></el-option>
               <el-option label="发布" value="published"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="文章来源">
-            <el-select size="small">
+          <el-form-item label="文章来源" prop="origin">
+            <el-select size="small" v-model="articleModel.origin">
               <el-option label="原创" value="draft"></el-option>
               <el-option label="转载" value="published"></el-option>
             </el-select>
           </el-form-item>
           <el-divider />
           <el-form-item>
-            <el-button class="publish-btn" type="primary" size="small" icon="el-icon-check">提交</el-button>
+            <el-button
+              class="publish-btn"
+              type="primary"
+              size="small"
+              icon="el-icon-check"
+              @click="submit('ruleForm')"
+            >
+              提交
+            </el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -106,7 +139,48 @@ export default {
   },
   data () {
     return {
-      checkList: ['选中且禁用','复选框 A']
+      imageUrl: '',
+      articleModel: {},
+      categoryData: [
+        { id: '1', name: 'Vue' },
+        { id: '2', name: 'React' },
+        { id: '3', name: 'Node' }
+      ],
+      tagData: [
+        { id: '1', name: 'Vue' },
+        { id: '2', name: 'React' },
+        { id: '3', name: 'Node' }
+      ],
+      checkList: ['选中且禁用','复选框 A'],
+      rules: {
+        title: [
+          { required: true, message: '文章标题不能为空', trigger: 'blur' }
+        ],
+        description: [
+          { required: true, message: '文章简介不能为空', trigger: 'blur' }
+        ],
+        category: [
+          { required: true, message: '请选择一个分类目录', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+
+  methods: {
+    submit (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$notify({
+            type: 'success',
+            message: '文章发布成功'
+          })
+        } else {
+          this.$notify({
+            type: 'danger',
+            message: '文章发布失败'
+          })
+        }
+      })
     }
   }
 }

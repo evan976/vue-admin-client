@@ -42,18 +42,41 @@
       </el-tab-pane>
       <el-tab-pane label="密码修改" name="changePassword">
         <el-card>
-          <el-form>
-            <el-form-item label="旧密码" label-width="100px">
-              <el-input size="small" type="password" class="password" show-password></el-input>
+          <el-form :model="profileModel" :rules="rules" ref="ruleForm">
+            <el-form-item label="原密码" prop="password" label-width="100px">
+              <el-input
+                v-model="profileModel.password"
+                class="password"
+                size="small"
+                type="password"
+                show-password
+              ></el-input>
             </el-form-item>
-            <el-form-item label="新密码" label-width="100px">
-              <el-input size="small" type="password" class="new-password" show-password></el-input>
+            <el-form-item label="新密码" prop="new_password" label-width="100px">
+              <el-input
+                v-model="profileModel.new_password"
+                class="new-password"
+                size="small"
+                type="password"
+                show-password
+              ></el-input>
             </el-form-item>
-            <el-form-item label="确认密码" label-width="100px">
-              <el-input size="small" type="password" class="rel-new-password" show-password></el-input>
+            <el-form-item label="确认密码" prop="rel_new_password" label-width="100px">
+              <el-input
+                v-model="profileModel.rel_new_password"
+                class="rel-new-password"
+                size="small"
+                type="password"
+                show-password
+              ></el-input>
             </el-form-item>
             <el-form-item label-width="100px">
-              <el-button type="primary" size="small" icon="el-icon-check">更新</el-button>
+              <el-button
+                type="primary"
+                size="small"
+                icon="el-icon-check"
+                @click="updatePassword('ruleForm')"
+              >更新</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -67,12 +90,45 @@ export default {
   name: 'Profile',
   data() {
     return {
-      activeName: 'basicProfile'
+      activeName: 'basicProfile',
+      profileModel: {},
+      rules: {
+        password: [
+          { required: true, message: '原密码不能为空', trigger: 'blur' }
+        ],
+        new_password: [
+          { required: true, message: '新密码不能为空', trigger: 'blur' }
+        ],
+        rel_new_password: [
+          { required: true, message: '确认密码不能为空', trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
     handleClick(tab, event) {
       console.log(tab, event)
+    },
+
+    updatePassword (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$notify({
+            type: 'success',
+            title: '密码修改成功',
+            message: '请重新登录，正在跳转...',
+            duration: 0
+          })
+          setTimeout(() => {
+            this.$router.push('/login')
+          }, 3000)
+        } else {
+          this.$notify({
+            type: 'error',
+            title: '密码修改失败'
+          })
+        }
+      })
     }
   }
 }
