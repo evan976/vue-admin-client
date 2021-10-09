@@ -7,44 +7,25 @@
         type="primary"
         size="mini"
         icon="el-icon-plus"
-        @click="dialogFormVisible = true"
+        @click="showAddTagDialog"
       >
         新增标签
       </el-button>
     </div>
-    <el-table :data="tagData">
-      <el-table-column
-        prop="id"
-        label="ID"
-        width="120">
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="名称"
-        width="250">
-      </el-table-column>
-      <el-table-column
-        prop="slug"
-        label="别名"
-        width="250">
-      </el-table-column>
-      <el-table-column
-        prop="description"
-        label="描述">
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        width="220">
-        <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="primary" size="mini">编辑</el-button>
-          <el-button type="danger" size="mini">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
+    <el-tag
+      v-for="tag in tagData"
+      :key="tag._id"
+      closable
+      @close="removeTag(tag._id)"
+      @click="showEditDialog(tag._id)"
+      hit
+    >
+      <i class="el-icon-price-tag"></i>
+      {{tag.name}}
+    </el-tag>
     <el-dialog
       width="35%"
-      title="新增标签"
+      :title="id ? '编辑标签' : '新增标签'"
       :visible.sync="dialogFormVisible"
     >
       <el-form :model="tagModel" :rules="rules" ref="ruleForm">
@@ -62,7 +43,7 @@
             placeholder="请输入标签别名"
           ></el-input>
         </el-form-item>
-        <el-form-item label="描述" prop="description" label-width="80px">
+        <el-form-item label="描述" label-width="80px">
           <el-input
             v-model="tagModel.description"
             size="small"
@@ -74,19 +55,27 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogFormVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="addTag('ruleForm')">确 定</el-button>
+        <el-button size="small" type="primary" @click="saveTag('ruleForm')">确 定</el-button>
       </div>
     </el-dialog>
   </el-card>
 </template>
 
 <script>
-import { getTagList } from '@/request/api'
+import {
+  getTagList,
+  getTag,
+  createTag,
+  updateTag,
+  removeTag
+} from '@/request/api'
+import { requestResultNotify, handleResultNotify } from '@/utils/notify'
 
 export default {
   name: 'Tag',
   data () {
     return {
+      id: '',
       tagData: [],
       tagModel: {},
       dialogFormVisible: false,
@@ -96,9 +85,6 @@ export default {
         ],
         slug: [
           { required: true, message: '标签别名不能为空', trigger: 'blur' }
-        ],
-        description: [
-          { required: true, message: '标签描述不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -111,35 +97,51 @@ export default {
   methods: {
 
     async getTagData () {
-      const { message, data: { tagList } } = await getTagList()
+      const { code, message, data: { tagList } } = await getTagList()
       this.tagData = tagList
-      this.$notify({
-        type: 'success',
-        title: '数据请求成功',
-        message
+      requestResultNotify(code, message)
+    },
+
+    saveTag (formName) {
+      this.$refs[formName].validate(async valid => {
+        if (!valid) return false
+        if (this.id) {
+          const { code, message } = await updateTag(this.id, this.tagModel)
+          handleResultNotify(code, message)
+        } else {
+          const { code, message } = await createTag(this.tagModel)
+          handleResultNotify(code, message)
+          this.tagModel = {}
+        }
+        this.getTagData()
+        this.dialogFormVisible = false
       })
     },
 
-    addTag (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.dialogFormVisible = false
-          this.$notify({
-            type: 'success',
-            title: '新增标签成功'
-          })
-        } else {
-          this.$notify({
-            type: 'error',
-            title: '新增标签失败'
-          })
-        }
-      })
+    async showEditDialog (id) {
+      const { data: { result } } = await getTag(id)
+      this.tagModel = result
+      this.id = result._id
+      this.dialogFormVisible = true
+    },
+
+    async showAddTagDialog () {
+      this.dialogFormVisible = true
+      this.tagModel = {}
+      this.id = ''
+    },
+
+    removeTag (id) {
+      this.$confirm('此操作将永久删除该标签, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }).then(async () => {
+          const { code, message } = await removeTag(id)
+          handleResultNotify(code, message)
+          this.getTagData()
+        })
     }
   }
 }
 </script>
-
-<style>
-
-</style>

@@ -122,6 +122,8 @@
     <el-pagination
       background
       layout="prev, pager, next"
+      :page-size="pagination.limit"
+      :current-page="pagination.offset"
       :total="pagination.total">
     </el-pagination>
   </el-card>
@@ -153,6 +155,7 @@ export default {
   methods: {
     async getArticleData () {
       const { message, data: { articleList, pagination } } = await getArticleList()
+      console.log(pagination)
       this.articleData = articleList
       this.pagination = pagination
       this.$notify({

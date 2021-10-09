@@ -35,7 +35,8 @@ axios.interceptors.response.use(
   err => {
     if (err.response.status === -1) {
       this.$notify({
-        title: err.response.data.message,
+        title: '请求失败',
+        message: err.response.data.message,
         type: 'error'
       })
     }

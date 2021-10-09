@@ -35,7 +35,8 @@ import {
   Dialog,
   Link,
   Pagination,
-  Tag
+  Tag,
+  MessageBox
 } from 'element-ui'
 
 Vue.use(Container)
@@ -77,3 +78,4 @@ Dialog.props.lockScroll.default = false
 Vue.use(Dialog)
 
 Vue.prototype.$notify = Notification
+Vue.prototype.$confirm = MessageBox.confirm

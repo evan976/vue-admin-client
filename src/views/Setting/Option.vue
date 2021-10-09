@@ -28,8 +28,22 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="关键词" label-width="100px" prop="keywords">
-          <el-select v-model="optionsModel.keywords" clearable multiple filterable allow-create default-first-option placeholder="输入关键词后回车添加" style="width: 50%">
-            <el-option v-for="(item, index) in optionsModel.keywords" :key="item" :label="item" :value="index"></el-option>
+          <el-select
+            v-model="optionsModel.keywords"
+            clearable
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            placeholder="输入关键词后回车添加"
+            style="width: 50%"
+          >
+            <el-option
+              v-for="(item, index) in optionsModel.keywords"
+              :key="item + index"
+              :label="item"
+              :value="index"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="ICP备案号" label-width="100px">
@@ -50,7 +64,12 @@
           ></el-input>
         </el-form-item>
         <el-form-item label-width="100px">
-          <el-button type="primary" size="small" icon="el-icon-check">保存</el-button>
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-check"
+            @click="updateSiteOptions"
+          >保存</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -58,7 +77,7 @@
 </template>
 
 <script>
-import { getSiteOptions } from '@/request/api'
+import { getSiteOptions, updateSiteOptions } from '@/request/api'
 
 export default {
   name: 'Option',
@@ -79,6 +98,24 @@ export default {
         title: '数据请求成功',
         message
       })
+    },
+
+    async updateSiteOptions () {
+      const { code, message } = await updateSiteOptions(this.optionsModel)
+      if (code === 1) {
+        this.$notify({
+          type: 'success',
+          title: '操作成功',
+          message
+        })
+        this.getSiteOptions()
+      } else {
+        this.$notify({
+          type: 'error',
+          title: '操作失败',
+          message
+        })
+      }
     }
   }
 }

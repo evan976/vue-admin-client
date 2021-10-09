@@ -5,7 +5,6 @@
     </div>
     <el-tabs
       v-model="activeName"
-      @tab-click="handleClick"
     >
       <el-tab-pane label="基本信息" name="basicProfile">
         <el-card>
@@ -23,8 +22,8 @@
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
               <el-input
-              v-model="profileModel.gravatar"
-              class="avatar-url"
+                v-model="profileModel.gravatar"
+                class="avatar-url"
                 size="small"
                 placeholder="或者直接输入图片地址"
                 prefix-icon="el-icon-link">
@@ -35,6 +34,7 @@
                 v-model="profileModel.username"
                 class="nickname"
                 size="small"
+                disabled
               ></el-input>
             </el-form-item>
             <el-form-item label="邮箱" label-width="100px">
@@ -59,6 +59,7 @@
                 type="primary"
                 size="small"
                 icon="el-icon-check"
+                @click="updateProfile"
               >保存</el-button>
             </el-form-item>
           </el-form>
@@ -80,7 +81,11 @@
                 show-password
               ></el-input>
             </el-form-item>
-            <el-form-item label="新密码" prop="new_password" label-width="100px">
+            <el-form-item
+              label="新密码"
+              prop="new_password"
+              label-width="100px"
+            >
               <el-input
                 v-model="passwordModel.new_password"
                 class="new-password"
@@ -89,7 +94,11 @@
                 show-password
               ></el-input>
             </el-form-item>
-            <el-form-item label="确认密码" prop="rel_new_password" label-width="100px">
+            <el-form-item
+              label="确认密码"
+              prop="rel_new_password"
+              label-width="100px"
+            >
               <el-input
                 v-model="passwordModel.rel_new_password"
                 class="rel-new-password"
@@ -114,7 +123,7 @@
 </template>
 
 <script>
-import { getUserInfo } from '@/request/api'
+import { getUserInfo, updateUserInfo } from '@/request/api'
 
 export default {
   name: 'Profile',
@@ -153,28 +162,44 @@ export default {
       })
     },
 
-    handleClick(tab, event) {
-      console.log(tab, event)
+    async updateProfile () {
+      const { code, message } = await updateUserInfo(this.profileModel)
+      if (code === 1) {
+        this.$notify({
+          type: 'success',
+          title: '操作成功',
+          message
+        })
+        this.getUserInfo()
+      } else {
+        this.$notify({
+          type: 'error',
+          title: '操作失败',
+          message
+        })
+      }
     },
 
     updatePassword (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
+      this.$refs[formName].validate(async valid => {
+        if (!valid) return false
+        const { code, message } = await updateUserInfo(this.passwordModel)
+        if (code === 1) {
           this.$notify({
             type: 'success',
-            title: '密码修改成功',
-            message: '请重新登录，正在跳转...',
-            duration: 0
+            title: '操作成功',
+            message
           })
           setTimeout(() => {
             this.$router.push('/login')
-          }, 3000)
+          }, 2000)
         } else {
           this.$notify({
             type: 'error',
-            title: '密码修改失败'
+            title: '操作失败',
+            message
           })
-        }
+        }   
       })
     }
   }
@@ -217,7 +242,7 @@ export default {
   width: 30%;
 }
 
-.nickname, .email, .slogan,
+.nickname, .email, .slogan, .avatar-url,
 .password, .new-password, .rel-new-password {
   width: 50%;
 }

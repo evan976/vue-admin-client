@@ -33,15 +33,6 @@
         label="描述">
       </el-table-column>
       <el-table-column
-        prop="nums"
-        label="文章"
-      >
-        <template slot-scope="scope">
-          <i class="el-icon-document"></i>
-          文章 {{scope.row.nums || 0}} 篇
-        </template>
-      </el-table-column>
-      <el-table-column
         label="操作"
         width="180">
         <template slot-scope="scope">
@@ -64,7 +55,9 @@
     <el-pagination
       background
       layout="prev, pager, next"
-      :total="10">
+      :current-page="pagination.offset"
+      :page-size="pagination.limit"
+      :total="pagination.total">
     </el-pagination>
 
     <el-dialog width="35%" title="新增分类" :visible.sync="dialogFormVisible">
@@ -106,7 +99,7 @@
 </template>
 
 <script>
-import { getCategoryList } from '@/request/api'
+import { getCategoryList, createCategory } from '@/request/api'
 
 export default {
   name: 'Category',
@@ -114,6 +107,7 @@ export default {
     return {
       categoryData: [],
       categoryModel: {},
+      pagination: {},
       dialogFormVisible: false,
       rules: {
         name: [
@@ -135,8 +129,9 @@ export default {
 
   methods: {
     async getCategoryData () {
-      const { message, data: { categoryList } } = await getCategoryList()
+      const { message, data: { categoryList, pagination } } = await getCategoryList()
       this.categoryData = categoryList
+      this.pagination = pagination
       this.$notify({
         type: 'success',
         title: '数据请求成功',
@@ -145,20 +140,26 @@ export default {
     },
 
     addCategory (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.dialogFormVisible = false
+      this.$refs[formName].validate(async valid => {
+        if (!valid) return false
+        const { code, message } = await createCategory(this.categoryModel)
+        if (code === 1) {
           this.$notify({
             type: 'success',
-            title: '新增分类成功'
+            title: '操作成功',
+            message
           })
         } else {
           this.$notify({
             type: 'error',
-            title: '新增分类失败'
+            title: '操作失败',
+            message
           })
         }
-      });
+        this.dialogFormVisible = false
+        this.categoryModel = {}
+        this.getCategoryData()
+      })
     }
   }
 }
