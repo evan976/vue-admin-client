@@ -90,6 +90,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/variable.scss';
 .login-page {
   width: 100%;
   height: 100%;
@@ -99,7 +100,7 @@ export default {
 }
 .login-card {
   width: 25%;
-  color: #fff;
+  color: $white;
   .card-header {
     height: 60px;
     display: flex;

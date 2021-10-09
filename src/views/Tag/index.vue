@@ -17,7 +17,7 @@
       :key="tag._id"
       closable
       @close="removeTag(tag._id)"
-      @click="showEditDialog(tag._id)"
+      @click="showEditDialog(tag)"
       hit
     >
       <i class="el-icon-price-tag"></i>
@@ -64,11 +64,12 @@
 <script>
 import {
   getTagList,
-  getTag,
+  // getTag,
   createTag,
   updateTag,
   removeTag
 } from '@/request/api'
+
 import { requestResultNotify, handleResultNotify } from '@/utils/notify'
 
 export default {
@@ -118,10 +119,9 @@ export default {
       })
     },
 
-    async showEditDialog (id) {
-      const { data: { result } } = await getTag(id)
-      this.tagModel = result
-      this.id = result._id
+    async showEditDialog (tag) {
+      this.tagModel = tag
+      this.id = tag._id
       this.dialogFormVisible = true
     },
 

@@ -13,13 +13,16 @@ export const removeCategory = id => remove(`/categories/${id}`)
 
 // tag
 export const getTagList = () => get('/tags')
-export const getTag = id => get(`/tags/${id}`)
 export const createTag = tag => post('/tags', tag)
 export const updateTag = (id, tag) => put(`/tags/${id}`, tag)
 export const removeTag = id => remove(`/tags/${id}`)
 
 // article
 export const getArticleList = () => get('/articles')
+export const getArticle = id => get(`/articles/${id}`)
+export const createArticle = article => post('/articles', article)
+export const updateArticle = (id, article) => put(`/articles/${id}`, article)
+export const removeArticle = id => remove(`/articles/${id}`)
 
 // option
 export const getSiteOptions = () => get('/options')

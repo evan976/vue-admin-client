@@ -22,15 +22,22 @@ const routes = [
         component: () => import('@/views/Article'),
         children: [
           {
-            path: '/article/edit',
+            path: '/article/create',
             component: () => import('@/views/Article/Editor'),
+            hidden: false,
             meta: {
               title: '发表文章'
             }
           },
           {
+            path: '/article/edit/:id',
+            component: () => import('@/views/Article/Editor'),
+            hidden: true
+          },
+          {
             path: '/article/list',
             component: () => import('@/views/Article/List'),
+            hidden: false,
             meta: {
               title: '文章列表'
             }
@@ -64,6 +71,7 @@ const routes = [
           {
             path: '/setting/profile',
             component: () => import('@/views/Setting/Profile.vue'),
+            hidden: false,
             meta: {
               title: '个人信息'
             }
@@ -71,6 +79,7 @@ const routes = [
           {
             path: '/setting/option',
             component: () => import('@/views/Setting/Option.vue'),
+            hidden: false,
             meta: {
               title: '站点配置'
             }

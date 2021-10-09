@@ -34,6 +34,7 @@
 
 <script>
 import { getImageList } from '@/request/api'
+import { requestResultNotify } from '@/utils/notify'
 
 export default {
   name: 'File',
@@ -53,19 +54,7 @@ export default {
     async getImageData () {
       const { code, message, data: { result } } = await getImageList()
       this.imageData = result
-      if (code === 1) {
-        this.$notify({
-          type: 'success',
-          title: '数据请求成功',
-          message
-        })
-      } else {
-        this.$notify({
-          type: 'error',
-          title: '数据请求失败',
-          message
-        })
-      }
+      requestResultNotify(code, message)
     },
 
     showImageDetial (image) {

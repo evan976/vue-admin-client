@@ -7,7 +7,7 @@
         type="primary"
         size="mini"
         icon="el-icon-plus"
-        @click="dialogFormVisible = true"
+        @click="showAddCategoryDialog"
       >
         新增分类
       </el-button>
@@ -36,7 +36,13 @@
         label="操作"
         width="180">
         <template slot-scope="scope">
-          <el-tag @click="handleClick(scope.row)" type="primary" size="small" effect="plain" hit>
+          <el-tag
+            @click="handleClick(scope.row)"
+            type="primary"
+            size="small"
+            effect="plain"
+            hit
+          >
             <i class="el-icon-position"></i>
             宿主页面
           </el-tag>
@@ -44,12 +50,19 @@
             type="success"
             size="small"
             effect="plain"
-            @click="editCategory(scope.row._id)"
-            hit>
+            @click="showEditCategoryDialog(scope.row)"
+            hit
+          >
             <i class="el-icon-edit"></i>
             编辑分类
           </el-tag>
-          <el-tag type="danger" size="small" effect="plain" hit>
+          <el-tag
+            type="danger"
+            size="small"
+            effect="plain"
+            @click="removeCategory(scope.row._id)"
+            hit
+          >
             <i class="el-icon-delete"></i>
             回收站
           </el-tag>
@@ -65,7 +78,11 @@
       :total="pagination.total">
     </el-pagination>
 
-    <el-dialog width="35%" title="新增分类" :visible.sync="dialogFormVisible">
+    <el-dialog
+      width="35%"
+      :title="id ? '编辑分类': '新增分类'"
+      :visible.sync="dialogFormVisible"
+    >
       <el-form
         :model="categoryModel"
         :rules="rules"
@@ -97,20 +114,27 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogFormVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="addCategory('ruleForm')">确 定</el-button>
+        <el-button size="small" type="primary" @click="saveCategory('ruleForm')">确 定</el-button>
       </div>
     </el-dialog>
   </el-card>
 </template>
 
 <script>
-import { getCategoryList, createCategory } from '@/request/api'
-import { requestResultNotify } from '@/utils/notify'
+import {
+  getCategoryList,
+  createCategory,
+  updateCategory,
+  removeCategory
+} from '@/request/api'
+
+import { requestResultNotify, handleResultNotify } from '@/utils/notify'
 
 export default {
   name: 'Category',
   data () {
     return {
+      id: '',
       categoryData: [],
       categoryModel: {},
       pagination: {},
@@ -138,27 +162,45 @@ export default {
       requestResultNotify(code, message)
     },
 
-    addCategory (formName) {
+    showAddCategoryDialog () {
+      this.dialogFormVisible = true
+      this.categoryModel = {}
+      this.id = ''
+    },
+
+    showEditCategoryDialog (category) {
+      this.dialogFormVisible = true
+      this.categoryModel = category
+      this.id = category._id
+    },
+
+    saveCategory (formName) {
       this.$refs[formName].validate(async valid => {
         if (!valid) return false
-        const { code, message } = await createCategory(this.categoryModel)
-        if (code === 1) {
-          this.$notify({
-            type: 'success',
-            title: '操作成功',
-            message
-          })
+        if (!this.id) {
+          const { code, message } = await createCategory(this.categoryModel)
+          handleResultNotify(code, message)
+          this.categoryModel = {}
+
         } else {
-          this.$notify({
-            type: 'error',
-            title: '操作失败',
-            message
-          })
+          const { code, message } = await updateCategory(this.id, this.categoryModel)
+          handleResultNotify(code, message)
         }
-        this.dialogFormVisible = false
-        this.categoryModel = {}
         this.getCategoryData()
+        this.dialogFormVisible = false
       })
+    },
+
+    removeCategory (id) {
+      this.$confirm('此操作将永久删除该分类, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }).then(async () => {
+          const { code, message } = await removeCategory(id)
+          handleResultNotify(code, message)
+          this.getCategoryData()
+        })
     }
   }
 }

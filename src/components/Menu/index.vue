@@ -18,7 +18,7 @@
             {{item.meta.title}}
         </template>
         <el-menu-item v-for="child in item.children" :key="child.path" :index="child.path">
-            {{child.meta.title}}
+            {{!child.hidden && child.meta.title}}
         </el-menu-item>
       </el-submenu>
     </div>
