@@ -24,6 +24,7 @@ import {
   Form,
   FormItem,
   Select,
+  Option,
   Checkbox,
   CheckboxGroup,
   Upload,
@@ -61,6 +62,7 @@ Vue.use(Col)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Select)
+Vue.use(Option)
 Vue.use(Checkbox)
 Vue.use(CheckboxGroup)
 Vue.use(Upload)

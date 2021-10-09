@@ -27,8 +27,10 @@
             prefix-icon="el-icon-link"
           ></el-input>
         </el-form-item>
-        <el-form-item label="关键词" label-width="100px">
-          <el-input class="site-keywords" size="small"></el-input>
+        <el-form-item label="关键词" label-width="100px" prop="keywords">
+          <el-select v-model="optionsModel.keywords" clearable multiple filterable allow-create default-first-option placeholder="输入关键词后回车添加" style="width: 50%">
+            <el-option v-for="(item, index) in optionsModel.keywords" :key="item" :label="item" :value="index"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="ICP备案号" label-width="100px">
           <el-input

@@ -64,7 +64,7 @@
           </el-form>
         </el-card>
       </el-tab-pane>
-      <el-tab-pane label="密码修改" name="changePassword">
+      <el-tab-pane label="安全设置" name="changePassword">
         <el-card>
           <el-form :model="passwordModel" :rules="rules" ref="ruleForm">
             <el-form-item

@@ -43,7 +43,6 @@
               v-for="item in scope.row.tags"
               :key="item._id"
               size="small"
-              hit
             >
               <i class="el-icon-price-tag"></i>
               {{item.name}}
@@ -86,7 +85,7 @@
             disable-transitions
             effect="plain"
           >
-            <i :class="scope.row.state === 0 ? 'el-icon-edit' : 'el-icon-document-copy'"></i>
+            <i :class="scope.row.state === 0 ? 'el-icon-edit-outline' : 'el-icon-document-copy'"></i>
             {{scope.row.origin === 0 ? '原创' : '转载'}}
           </el-tag>
         </template>
@@ -97,16 +96,26 @@
         width="260"
       >
         <template slot-scope="scope">
-          <div>最早发布：{{scope.row.created_at}}</div>
-          <div>最后更新：{{scope.row.updated_at}}</div>
+          <div>最早发布：{{scope.row.created_at | dateFormat}}</div>
+          <div>最后更新：{{scope.row.updated_at | dateFormat}}</div>
         </template>
       </el-table-column>
       <el-table-column
         label="操作"
-        width="180">
+        width="140">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-          <el-button type="text" size="small">编辑</el-button>
+          <el-tag @click="handleClick(scope.row)" type="primary" size="small" effect="plain" hit>
+            <i class="el-icon-position"></i>
+            查看
+          </el-tag>
+          <el-tag type="success" size="small" effect="plain" hit>
+            <i class="el-icon-edit"></i>
+            编辑
+          </el-tag>
+          <el-tag type="danger" size="small" effect="plain" hit>
+            <i class="el-icon-delete"></i>
+            删除
+          </el-tag>
         </template>
       </el-table-column>
     </el-table>
@@ -119,10 +128,17 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
 import { getArticleList } from '@/request/api'
 
 export default {
   name: 'ArticleList',
+  filters: {
+    dateFormat: function (date) {
+      return dayjs(date).format('YYYY-MM-DD HH:mm')
+    }
+  },
+
   data () {
     return {
       articleData: [],

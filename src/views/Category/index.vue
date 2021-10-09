@@ -33,14 +33,39 @@
         label="描述">
       </el-table-column>
       <el-table-column
+        prop="nums"
+        label="文章"
+      >
+        <template slot-scope="scope">
+          <i class="el-icon-document"></i>
+          文章 {{scope.row.nums || 0}} 篇
+        </template>
+      </el-table-column>
+      <el-table-column
         label="操作"
         width="180">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="primary" size="small" icon="el-icon-edit" circle></el-button>
-          <el-button type="danger" size="small" icon="el-icon-delete" circle></el-button>
+          <el-tag @click="handleClick(scope.row)" type="primary" size="small" effect="plain" hit>
+            <i class="el-icon-position"></i>
+            宿主页面
+          </el-tag>
+          <el-tag type="success" size="small" effect="plain" hit>
+            <i class="el-icon-edit"></i>
+            编辑分类
+          </el-tag>
+          <el-tag type="danger" size="small" effect="plain" hit>
+            <i class="el-icon-delete"></i>
+            回收站
+          </el-tag>
         </template>
       </el-table-column>
     </el-table>
+
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="10">
+    </el-pagination>
 
     <el-dialog width="35%" title="新增分类" :visible.sync="dialogFormVisible">
       <el-form
