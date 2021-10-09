@@ -8,8 +8,8 @@ export const updateUserInfo = user => put('/users', user)
 // category
 export const getCategoryList = () => get('/categories')
 export const createCategory = category => post('/categories', category)
-export const updateCategory = category => put('/categories', category)
-export const removeCategory = id => remove('/categories', id)
+export const updateCategory = (id, category) => put(`/categories/${id}`, category)
+export const removeCategory = id => remove(`/categories/${id}`)
 
 // tag
 export const getTagList = () => get('/tags')

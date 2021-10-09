@@ -1,3 +1,5 @@
+import { getToken } from '@/utils/auth'
+
 export default {
-  token: ''
+  token: getToken() ? getToken() : ''
 }

@@ -40,7 +40,12 @@
             <i class="el-icon-position"></i>
             宿主页面
           </el-tag>
-          <el-tag type="success" size="small" effect="plain" hit>
+          <el-tag
+            type="success"
+            size="small"
+            effect="plain"
+            @click="editCategory(scope.row._id)"
+            hit>
             <i class="el-icon-edit"></i>
             编辑分类
           </el-tag>
@@ -80,7 +85,7 @@
             placeholder="请输入分类别名"
           ></el-input>
         </el-form-item>
-        <el-form-item label="描述" prop="description" label-width="80px">
+        <el-form-item label="描述" label-width="80px">
           <el-input
             v-model="categoryModel.description"
             size="small"
@@ -100,6 +105,7 @@
 
 <script>
 import { getCategoryList, createCategory } from '@/request/api'
+import { requestResultNotify } from '@/utils/notify'
 
 export default {
   name: 'Category',
@@ -115,9 +121,6 @@ export default {
         ],
         slug: [
           { required: true, message: '分类别名不能为空', trigger: 'blur' }
-        ],
-        description: [
-          { required: true, message: '分类描述不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -129,14 +132,10 @@ export default {
 
   methods: {
     async getCategoryData () {
-      const { message, data: { categoryList, pagination } } = await getCategoryList()
+      const { code, message, data: { categoryList, pagination } } = await getCategoryList()
       this.categoryData = categoryList
       this.pagination = pagination
-      this.$notify({
-        type: 'success',
-        title: '数据请求成功',
-        message
-      })
+      requestResultNotify(code, message)
     },
 
     addCategory (formName) {
