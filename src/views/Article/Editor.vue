@@ -37,24 +37,26 @@
               allow-create
               default-first-option
               placeholder="输入关键词后回车"
-            ></el-select>
+            >
+            </el-select>
           </el-form-item>
           <el-form-item label="分类" prop="category">
             <el-select
               size="small"
               class="category"
               placeholder="选择分类"
+              v-model="articleModel.category"
             >
               <el-option
                 v-for="item in categoryData"
-                :key="item.id"
+                :key="item._id"
                 :label="item.name"
-                :value="item.id"
+                :value="item._id"
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="内容">
-            <article-content />
+          <el-form-item label="内容" prop="content">
+            <Markdown v-model="articleModel.content" />
           </el-form-item>
         </el-form>
       </el-card>
@@ -64,10 +66,13 @@
         <div slot="header" class="clearfix">
           <span>标签目录</span>
         </div>
-        <el-checkbox-group v-model="checkList">
-          <el-checkbox label="复选框 A"></el-checkbox>
-          <el-checkbox label="复选框 B"></el-checkbox>
-          <el-checkbox label="复选框 C"></el-checkbox>
+        <el-checkbox-group v-model="articleModel.tags">
+          <el-checkbox
+            v-for="tag in tagData"
+            :key="tag._id"
+            :label="tag.name">
+              {{tag.name}}
+            </el-checkbox>
         </el-checkbox-group>
       </el-card>
       <el-card class="thumb">
@@ -101,14 +106,14 @@
         >
           <el-form-item label="文章状态" prop="state">
             <el-select size="small" v-model="articleModel.state">
-              <el-option label="草稿" value="draft"></el-option>
-              <el-option label="发布" value="published"></el-option>
+              <el-option label="草稿" value="0"></el-option>
+              <el-option label="发布" value="1"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="文章来源" prop="origin">
             <el-select size="small" v-model="articleModel.origin">
-              <el-option label="原创" value="draft"></el-option>
-              <el-option label="转载" value="published"></el-option>
+              <el-option label="原创" value="0"></el-option>
+              <el-option label="转载" value="1"></el-option>
             </el-select>
           </el-form-item>
           <el-divider />
@@ -118,7 +123,7 @@
               type="primary"
               size="small"
               icon="el-icon-check"
-              @click="submit('ruleForm')"
+              @click="saveArticle('ruleForm')"
             >
               提交
             </el-button>
@@ -130,28 +135,25 @@
 </template>
 
 <script>
-import ArticleContent from '@/components/Meditor'
+import Markdown from 'vue-meditor'
+import {
+  getCategoryList,
+  getTagList
+} from '@/request/api'
 
 export default {
   name: 'Editor',
   components: {
-    ArticleContent
+    Markdown
   },
   data () {
     return {
       imageUrl: '',
-      articleModel: {},
-      categoryData: [
-        { id: '1', name: 'Vue' },
-        { id: '2', name: 'React' },
-        { id: '3', name: 'Node' }
-      ],
-      tagData: [
-        { id: '1', name: 'Vue' },
-        { id: '2', name: 'React' },
-        { id: '3', name: 'Node' }
-      ],
-      checkList: ['选中且禁用','复选框 A'],
+      articleModel: {
+        tags: []
+      },
+      tagData: [],
+      categoryData: [],
       rules: {
         title: [
           { required: true, message: '文章标题不能为空', trigger: 'blur' }
@@ -161,13 +163,28 @@ export default {
         ],
         category: [
           { required: true, message: '请选择一个分类目录', trigger: 'blur' }
-        ]
+        ],
+        content: [
+          { required: true, message: '文章内容不能为空', trigger: 'blur' }
+        ],
       }
     }
   },
 
+  created () {
+    this.initData()
+  },
+
   methods: {
-    submit (formName) {
+
+    async initData () {
+      const { data: { categoryList } } = await getCategoryList()
+      const { data: { tagList } } = await getTagList()
+      this.categoryData = categoryList
+      this.tagData = tagList
+    },
+
+    saveArticle (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$notify({

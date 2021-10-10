@@ -6,7 +6,9 @@
       <div class="app-main">
         <Breadcrumb />
         <el-main>
-          <router-view />
+          <keep-alive>
+            <router-view v-if="$route.meta.keepAlive" />
+          </keep-alive>
         </el-main>
       </div>
     </el-container>

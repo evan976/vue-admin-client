@@ -64,7 +64,6 @@
 <script>
 import {
   getTagList,
-  // getTag,
   createTag,
   updateTag,
   removeTag

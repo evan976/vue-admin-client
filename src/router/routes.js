@@ -26,20 +26,23 @@ const routes = [
             component: () => import('@/views/Article/Editor'),
             hidden: false,
             meta: {
-              title: '发表文章'
+              title: '发表文章',
+              keepAlive: true
             }
           },
           {
             path: '/article/edit/:id',
             component: () => import('@/views/Article/Editor'),
-            hidden: true
+            hidden: true,
+            meta: { title: null }
           },
           {
             path: '/article/list',
             component: () => import('@/views/Article/List'),
             hidden: false,
             meta: {
-              title: '文章列表'
+              title: '文章列表',
+              keepAlive: true
             }
           }
         ]
@@ -48,19 +51,31 @@ const routes = [
         path: '/category',
         name: 'Category',
         component: () => import('@/views/Category'),
-        meta: { title: '分类管理', icon: 'el-icon-folder-opened' }
+        meta: {
+          title: '分类管理',
+          icon: 'el-icon-folder-opened',
+          keepAlive: true
+        }
       },
       {
         path: '/tag',
         name: 'Tag',
         component: () => import('@/views/Tag'),
-        meta: { title: '标签管理', icon: 'el-icon-price-tag' }
+        meta: {
+          title: '标签管理',
+          icon: 'el-icon-price-tag',
+          keepAlive: true
+        }
       },
       {
         path: '/file',
         name: 'File',
         component: () => import('@/views/File'),
-        meta: { title: '文件管理', icon: 'el-icon-picture-outline' }
+        meta: {
+          title: '文件管理',
+          icon: 'el-icon-picture-outline',
+          keepAlive: true
+        }
       },
       {
         path: '/setting',
@@ -73,7 +88,8 @@ const routes = [
             component: () => import('@/views/Setting/Profile.vue'),
             hidden: false,
             meta: {
-              title: '个人信息'
+              title: '个人信息',
+              keepAlive: true
             }
           },
           {
@@ -81,13 +97,19 @@ const routes = [
             component: () => import('@/views/Setting/Option.vue'),
             hidden: false,
             meta: {
-              title: '站点配置'
+              title: '站点配置',
+              keepAlive: true
             }
           }
         ]
       }
     ]
   },
+  {
+    path: '*',
+    name: 'NotFound',
+    component: () => import('@/views/NotFound')
+  }
 ]
 
 export default routes

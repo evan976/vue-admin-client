@@ -11,8 +11,16 @@
             <img class="avatar" src="@/assets/images/avatar.png" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-warning-outline">个人信息</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-switch-button">退出登录</el-dropdown-item>
+            <el-dropdown-item
+              icon="el-icon-warning-outline"
+              @click.native="$router.push('/setting/profile')">
+                个人信息
+              </el-dropdown-item>
+            <el-dropdown-item
+              icon="el-icon-switch-button"
+              @click.native="logout">
+              退出登录
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </a>
@@ -22,7 +30,20 @@
 
 <script>
 export default {
-  name: 'Header'
+  name: 'Header',
+  methods: {
+    logout () {
+      this.$store.commit('removeToken')
+      this.$notify({
+        title: '操作成功',
+        message: '退出登录成功',
+        type: 'success'
+      })
+      setTimeout(() => {
+        this.$router.push('/login')
+      }, 2000)
+    }
+  }
 }
 </script>
 

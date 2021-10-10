@@ -1,13 +1,13 @@
-import { setToken, removeToken } from '@/utils/auth'
+import { setItem, removeItem } from '@/utils/auth'
 
 export default {
   setToken (state, token) {
     state.token = token
-    setToken(token)
+    setItem('token', token)
   },
 
   removeToken (state) {
     state.token = ''
-    removeToken()
+    removeItem('token')
   }
 }

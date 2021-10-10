@@ -9,6 +9,22 @@ html {
   background-color: $body-bg;
 }
 
+body {
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $primary;
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: $error;
+}
+
 .el-menu-item, .el-submenu__title {
   height: 42px;
   line-height: 42px;

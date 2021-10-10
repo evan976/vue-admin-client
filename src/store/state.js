@@ -1,5 +1,5 @@
-import { getToken } from '@/utils/auth'
+import { getItem } from '@/utils/auth'
 
 export default {
-  token: getToken() ? getToken() : ''
+  token: getItem('token') ? getItem('token') : ''
 }
