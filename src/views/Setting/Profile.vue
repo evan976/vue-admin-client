@@ -12,7 +12,7 @@
             <el-form-item label="个人头像" label-width="100px">
               <el-upload
                 class="upload-avatar"
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action="http://localhost:8000/api/private/v1/images/uplaod"
                 :show-file-list="false">
                 <img
                   v-if="profileModel.gravatar"

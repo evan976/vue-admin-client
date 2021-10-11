@@ -104,11 +104,22 @@
         label="操作"
         width="140">
         <template slot-scope="scope">
-          <el-tag @click="handleClick(scope.row)" type="primary" size="small" effect="plain" hit>
-            <i class="el-icon-position"></i>
-            查看
+          <el-tag
+            @click="handleClick(scope.row)"
+            type="primary"
+            size="small"
+            effect="plain"
+            hit>
+              <i class="el-icon-position"></i>
+              查看
           </el-tag>
-          <el-tag type="success" size="small" effect="plain" hit>
+          <el-tag
+            type="success"
+            size="small"
+            effect="plain"
+            hit
+            @click="$router.push(`/article/edit/${scope.row._id}`)"
+          >
             <i class="el-icon-edit"></i>
             编辑
           </el-tag>

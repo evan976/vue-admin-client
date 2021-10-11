@@ -34,7 +34,11 @@ const routes = [
             path: '/article/edit/:id',
             component: () => import('@/views/Article/Editor'),
             hidden: true,
-            meta: { title: null }
+            props: true,
+            meta: {
+              title: null,
+              keepAlive: true
+            }
           },
           {
             path: '/article/list',

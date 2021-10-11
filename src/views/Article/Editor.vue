@@ -48,10 +48,10 @@
               v-model="articleModel.category"
             >
               <el-option
-                v-for="item in categoryData"
-                :key="item._id"
-                :label="item.name"
-                :value="item._id"
+                v-for="category in categoryData"
+                :key="category._id"
+                :label="category.name"
+                :value="category._id"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -70,9 +70,12 @@
           <el-checkbox
             v-for="tag in tagData"
             :key="tag._id"
-            :label="tag.name">
-              {{tag.name}}
-            </el-checkbox>
+            :label="tag._id"
+            size="small"
+            border
+          >
+            {{tag.name}}
+          </el-checkbox>
         </el-checkbox-group>
       </el-card>
       <el-card class="thumb">
@@ -81,17 +84,17 @@
         </div>
         <el-upload
           class="upload-thumb"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="http://localhost:8000/api/private/v1/images/upload"
           :show-file-list="false">
-          <img v-if="imageUrl" :src="imageUrl" class="article-image">
+          <img v-if="articleModel.thumb" :src="articleModel.thumb" class="article-image">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
         <el-divider />
         <el-input
+          v-model="articleModel.thumb"
           size="small"
           placeholder="或者直接输入图片地址"
           prefix-icon="el-icon-link"
-          v-model="articleModel.thumb"
         >
         </el-input>
       </el-card>
@@ -99,18 +102,14 @@
         <div slot="header" class="clearfix">
           <span>发布选项</span>
         </div>
-        <el-form
-          :model="articleModel"
-          :rules="rules"
-          ref="ruleForm"
-        >
-          <el-form-item label="文章状态" prop="state">
+        <el-form>
+          <el-form-item label="文章状态">
             <el-select size="small" v-model="articleModel.state">
               <el-option label="草稿" value="0"></el-option>
               <el-option label="发布" value="1"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="文章来源" prop="origin">
+          <el-form-item label="文章来源">
             <el-select size="small" v-model="articleModel.origin">
               <el-option label="原创" value="0"></el-option>
               <el-option label="转载" value="1"></el-option>
@@ -138,17 +137,25 @@
 import Markdown from 'vue-meditor'
 import {
   getCategoryList,
-  getTagList
+  getTagList,
+  getArticle,
+  createArticle
 } from '@/request/api'
+import { handleResultNotify } from '@/utils/notify'
 
 export default {
   name: 'Editor',
+  props: {
+    id: {
+      type: String
+    }
+  },
+
   components: {
     Markdown
   },
   data () {
     return {
-      imageUrl: '',
       articleModel: {
         tags: []
       },
@@ -173,6 +180,7 @@ export default {
 
   created () {
     this.initData()
+    this.id && this.getArticleDetail(this.id)
   },
 
   methods: {
@@ -184,19 +192,18 @@ export default {
       this.tagData = tagList
     },
 
+    async getArticleDetail (id) {
+      const { data: { result } } = await getArticle(id)
+      this.articleModel = result
+      console.log(result)
+    },
+
     saveArticle (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$notify({
-            type: 'success',
-            message: '文章发布成功'
-          })
-        } else {
-          this.$notify({
-            type: 'danger',
-            message: '文章发布失败'
-          })
-        }
+      this.$refs[formName].validate(async valid => {
+        if (!valid) return false
+        const { code, message } = await createArticle(this.articleModel)
+        handleResultNotify(code, message)
+        this.$router.push('/article/list')
       })
     }
   }
