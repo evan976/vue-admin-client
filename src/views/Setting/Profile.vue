@@ -124,6 +124,7 @@
 
 <script>
 import { getUserInfo, updateUserInfo } from '@/request/api'
+import { requestResultNotify, handleResultNotify } from '@/utils/notify'
 
 export default {
   name: 'Profile',
@@ -153,31 +154,15 @@ export default {
   methods: {
 
     async getUserInfo () {
-      const { message, data: { user } } = await getUserInfo()
+      const { code, message, data: { user } } = await getUserInfo()
       this.profileModel = user
-      this.$notify({
-        type: 'success',
-        title: '数据请求成功',
-        message
-      })
+      requestResultNotify(code, message)
     },
 
     async updateProfile () {
       const { code, message } = await updateUserInfo(this.profileModel)
-      if (code === 1) {
-        this.$notify({
-          type: 'success',
-          title: '操作成功',
-          message
-        })
-        this.getUserInfo()
-      } else {
-        this.$notify({
-          type: 'error',
-          title: '操作失败',
-          message
-        })
-      }
+      handleResultNotify(code, message)
+      this.getUserInfo()
     },
 
     updatePassword (formName) {

@@ -117,13 +117,19 @@
             type="success"
             size="small"
             effect="plain"
-            hit
             @click="$router.push(`/article/edit/${scope.row._id}`)"
+            hit
           >
             <i class="el-icon-edit"></i>
             编辑
           </el-tag>
-          <el-tag type="danger" size="small" effect="plain" hit>
+          <el-tag
+            type="danger"
+            size="small"
+            effect="plain"
+            @click="removeArticle(scope.row._id)"
+            hit
+          >
             <i class="el-icon-delete"></i>
             删除
           </el-tag>
@@ -142,7 +148,8 @@
 
 <script>
 import dayjs from 'dayjs'
-import { getArticleList } from '@/request/api'
+import { getArticleList, removeArticle } from '@/request/api'
+import { requestResultNotify, handleResultNotify } from '@/utils/notify'
 
 export default {
   name: 'ArticleList',
@@ -165,14 +172,21 @@ export default {
 
   methods: {
     async getArticleData () {
-      const { message, data: { articleList, pagination } } = await getArticleList()
-      console.log(pagination)
+      const { code, message, data: { articleList, pagination } } = await getArticleList()
       this.articleData = articleList
       this.pagination = pagination
-      this.$notify({
-        type: 'success',
-        title: '数据请求成功',
-        message
+      requestResultNotify(code, message)
+    },
+
+    async removeArticle (id) {
+      this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(async () => {
+        const { code, message } = await removeArticle(id)
+        handleResultNotify(code, message)
+        this.getArticleData()
       })
     }
   }

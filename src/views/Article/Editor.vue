@@ -66,18 +66,21 @@
         <div slot="header" class="clearfix">
           <span>标签目录</span>
         </div>
-        <!-- <el-checkbox-group v-model="articleModel.tags"> -->
-          <el-checkbox
-            v-model="articleModel.tags"
+        <el-select
+          v-if="tagData.length > 0"
+          v-model="articleModel.tags"
+          style="width: 100%"
+          size="small"
+          multiple
+          placeholder="请选择标签"
+        >
+          <el-option
             v-for="tag in tagData"
             :key="tag._id"
-            :label="tag._id"
-            size="mini"
-            border
-          >
-            {{tag.name}}
-          </el-checkbox>
-        <!-- </el-checkbox-group> -->
+            :label="tag.name"
+            :value="tag._id"
+          ></el-option>
+        </el-select>
       </el-card>
       <el-card class="thumb">
         <div slot="header" class="clearfix">
@@ -148,7 +151,8 @@ import {
   getCategoryList,
   getTagList,
   getArticle,
-  createArticle
+  createArticle,
+  updateArticle
 } from '@/request/api'
 import { handleResultNotify } from '@/utils/notify'
 
@@ -165,9 +169,7 @@ export default {
   },
   data () {
     return {
-      articleModel: {
-        tags: []
-      },
+      articleModel: {},
       tagData: [],
       categoryData: [],
       articleState: [
@@ -200,8 +202,8 @@ export default {
   },
 
   created () {
+    this.id && this.getArticleDetail()
     this.initData()
-    this.id && this.getArticleDetail(this.id)
   },
 
   methods: {
@@ -213,17 +215,23 @@ export default {
       this.tagData = tagList
     },
 
-    async getArticleDetail (id) {
-      const { data: { result } } = await getArticle(id)
-      this.articleModel = result
+    async getArticleDetail () {
+      const { data: { result } } = await getArticle(this.id)
+      this.articleModel = Object.assign({}, this.articleModel, result)
     },
 
     saveArticle (formName) {
       this.$refs[formName].validate(async valid => {
         if (!valid) return false
-        const { code, message } = await createArticle(this.articleModel)
-        handleResultNotify(code, message)
-        this.$router.push('/article/list')
+        if (!this.id) {
+          const { code, message } = await createArticle(this.articleModel)
+          handleResultNotify(code, message)
+          this.$router.push('/article/list')
+        } else {
+          const { code, message } = await updateArticle(this.id, this.articleModel)
+          handleResultNotify(code, message)
+          this.getArticleDetail()
+        }
       })
     }
   }

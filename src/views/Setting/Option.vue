@@ -78,6 +78,7 @@
 
 <script>
 import { getSiteOptions, updateSiteOptions } from '@/request/api'
+import { requestResultNotify, handleResultNotify } from '@/utils/notify'
 
 export default {
   name: 'Option',
@@ -91,31 +92,15 @@ export default {
   },
   methods: {
     async getSiteOptions () {
-      const { message, data: { result }} = await getSiteOptions()
+      const { code, message, data: { result }} = await getSiteOptions()
       this.optionsModel = result
-      this.$notify({
-        type: 'success',
-        title: '数据请求成功',
-        message
-      })
+      requestResultNotify(code, message)
     },
 
     async updateSiteOptions () {
       const { code, message } = await updateSiteOptions(this.optionsModel)
-      if (code === 1) {
-        this.$notify({
-          type: 'success',
-          title: '操作成功',
-          message
-        })
-        this.getSiteOptions()
-      } else {
-        this.$notify({
-          type: 'error',
-          title: '操作失败',
-          message
-        })
-      }
+      handleResultNotify(code, message)
+      this.getSiteOptions()
     }
   }
 }
