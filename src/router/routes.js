@@ -36,7 +36,7 @@ const routes = [
             hidden: true,
             props: true,
             meta: {
-              title: null,
+              title: '编辑文章',
               keepAlive: true
             }
           },

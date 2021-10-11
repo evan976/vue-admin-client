@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import axios from 'axios'
 import qs from 'qs'
 import store from '@/store'
@@ -34,7 +35,7 @@ axios.interceptors.response.use(
   },
   err => {
     if (err.response.status === -1) {
-      this.$notify({
+      Vue.prototype.$notify({
         title: '请求失败',
         message: err.response.data.message,
         type: 'error'

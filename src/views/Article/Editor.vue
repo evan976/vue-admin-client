@@ -3,7 +3,7 @@
     <el-col :span="17">
       <el-card>
         <div slot="header" class="clearfix">
-          <span>发表文章</span>
+          <span>{{id ? '编辑文章' : '发表文章'}}</span>
         </div>
         <el-form
           :model="articleModel"
@@ -66,17 +66,18 @@
         <div slot="header" class="clearfix">
           <span>标签目录</span>
         </div>
-        <el-checkbox-group v-model="articleModel.tags">
+        <!-- <el-checkbox-group v-model="articleModel.tags"> -->
           <el-checkbox
+            v-model="articleModel.tags"
             v-for="tag in tagData"
             :key="tag._id"
             :label="tag._id"
-            size="small"
+            size="mini"
             border
           >
             {{tag.name}}
           </el-checkbox>
-        </el-checkbox-group>
+        <!-- </el-checkbox-group> -->
       </el-card>
       <el-card class="thumb">
         <div slot="header" class="clearfix">
@@ -105,14 +106,22 @@
         <el-form>
           <el-form-item label="文章状态">
             <el-select size="small" v-model="articleModel.state">
-              <el-option label="草稿" value="0"></el-option>
-              <el-option label="发布" value="1"></el-option>
+              <el-option
+                v-for="state in articleState"
+                :key="state.value"
+                :label="state.label"
+                :value="state.value"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="文章来源">
             <el-select size="small" v-model="articleModel.origin">
-              <el-option label="原创" value="0"></el-option>
-              <el-option label="转载" value="1"></el-option>
+              <el-option
+                v-for="origin in articleOrigin"
+                :key="origin.value"
+                :label="origin.label"
+                :value="origin.value"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-divider />
@@ -161,6 +170,14 @@ export default {
       },
       tagData: [],
       categoryData: [],
+      articleState: [
+        { label: '暂存草稿', value: 0 },
+        { label: '直接发布', value: 1 }
+      ],
+      articleOrigin: [
+        { label: '原创', value: 0 },
+        { label: '转载', value: 1 }
+      ],
       rules: {
         title: [
           { required: true, message: '文章标题不能为空', trigger: 'blur' }
@@ -176,6 +193,10 @@ export default {
         ],
       }
     }
+  },
+
+  computed: {
+    
   },
 
   created () {
@@ -195,7 +216,6 @@ export default {
     async getArticleDetail (id) {
       const { data: { result } } = await getArticle(id)
       this.articleModel = result
-      console.log(result)
     },
 
     saveArticle (formName) {
