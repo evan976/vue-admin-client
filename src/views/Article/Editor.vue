@@ -89,7 +89,10 @@
         <el-upload
           class="upload-thumb"
           action="http://localhost:8000/api/private/v1/images/upload"
-          :show-file-list="false">
+          :show-file-list="false"
+          :headers="headers"
+          :on-success="successUpload"
+          :before-upload="beforeUpload">
           <img v-if="articleModel.thumb" :src="articleModel.thumb" class="article-image">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
@@ -169,7 +172,12 @@ export default {
   },
   data () {
     return {
-      articleModel: {},
+      headers: {
+        Authorization: null
+      },
+      articleModel: {
+        thumb: ''
+      },
       tagData: [],
       categoryData: [],
       articleState: [
@@ -207,6 +215,17 @@ export default {
   },
 
   methods: {
+
+    beforeUpload () {
+      const token = this.$store.state.token
+      this.headers.Authorization = `Bearer ${token}`
+    },
+
+    successUpload (result) {
+      const { code, message, data: { url } } = result
+      this.articleModel.thumb = url
+      handleResultNotify(code, message)
+    },
 
     async initData () {
       const { data: { categoryList } } = await getCategoryList()
@@ -253,8 +272,6 @@ export default {
 }
 
 .upload-thumb {
-  width: 100%;
-  height: 120px;
   border-radius: 2px;
   border: 1px dashed $border;
   cursor: pointer;
@@ -277,9 +294,8 @@ export default {
 }
 
 .article-image {
-  width: 305px;
-  height: 120px;
-  display: block;
+  width: 100%;
+  vertical-align: middle;
 }
 
 .publish-btn {
