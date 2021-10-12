@@ -97,6 +97,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: url('../../assets/images/bg.svg');
 }
 .login-card {
   width: 25%;

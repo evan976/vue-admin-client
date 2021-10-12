@@ -75,7 +75,10 @@
       layout="prev, pager, next"
       :current-page="pagination.offset"
       :page-size="pagination.limit"
-      :total="pagination.total">
+      :total="pagination.total"
+      @current-change="handleCurrentChange"
+      @size-change="handleSizeChange"
+    >
     </el-pagination>
 
     <el-dialog
@@ -155,6 +158,15 @@ export default {
   },
 
   methods: {
+
+    handleCurrentChange (val) {
+      console.log(val)
+    },
+
+    handleSizeChange (val) {
+      console.log(val)
+    },
+
     async getCategoryData () {
       const { code, message, data: { categoryList, pagination } } = await getCategoryList()
       this.categoryData = categoryList

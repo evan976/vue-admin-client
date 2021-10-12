@@ -12,8 +12,12 @@
             <el-form-item label="个人头像" label-width="100px">
               <el-upload
                 class="upload-avatar"
-                action="http://localhost:8000/api/private/v1/images/uplaod"
-                :show-file-list="false">
+                :headers="headers"
+                :action="action"
+                :show-file-list="false"
+                :before-upload="beforeUpload"
+                :on-success="successUpload"
+              >
                 <img
                   v-if="profileModel.gravatar"
                   :src="profileModel.gravatar"
@@ -130,8 +134,14 @@ export default {
   name: 'Profile',
   data() {
     return {
+      action: 'http://localhost:8000/api/private/v1/images/upload',
+      headers: {
+        Authorization: null
+      },
       activeName: 'basicProfile',
-      profileModel: {},
+      profileModel: {
+        gravatar: null
+      },
       passwordModel: {},
       rules: {
         password: [
@@ -152,6 +162,18 @@ export default {
   },
 
   methods: {
+
+    beforeUpload () {
+      const token = this.$store.state.token
+      this.headers.Authorization = `Bearer ${token}`
+    },
+
+    successUpload (result) {
+      const { code, message, data: { url } } = result
+      this.profileModel.gravatar = url
+      handleResultNotify(code, message)
+    },
+
 
     async getUserInfo () {
       const { code, message, data: { user } } = await getUserInfo()

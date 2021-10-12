@@ -88,14 +88,19 @@
         </div>
         <el-upload
           class="upload-thumb"
-          action="http://localhost:8000/api/private/v1/images/upload"
+          :action="action"
           :show-file-list="false"
           :headers="headers"
           :on-success="successUpload"
           :before-upload="beforeUpload">
-          <img v-if="articleModel.thumb" :src="articleModel.thumb" class="article-image">
+          <img
+            v-if="articleModel.thumb"
+            :src="articleModel.thumb"
+            class="article-image"
+          >
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
+        <div class="el-upload__tip">tips: 图片大小不能超过5MB</div>
         <el-divider />
         <el-input
           v-model="articleModel.thumb"
@@ -172,6 +177,7 @@ export default {
   },
   data () {
     return {
+      action: 'http://localhost:8000/api/private/v1/images/upload',
       headers: {
         Authorization: null
       },
