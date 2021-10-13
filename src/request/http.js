@@ -5,7 +5,7 @@ import store from '@/store'
 
 
 if (process.env.NODE_ENV === 'development') {
-  axios.defaults.baseURL = 'http://localhost:8000/api/private/v1'
+  axios.defaults.baseURL = 'http://localhost:80/api/private/v1'
 } else if (process.env.NODE_ENV === 'production') {
   axios.defaults.baseURL = 'https://api.evanone.site'
 }
@@ -17,7 +17,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 axios.interceptors.request.use(
   config => {
     const token = store.state.token
-    token && (config.headers.Authorization = token)
+    token && (config.headers.Authorization = `Bearer ${token}`)
     return config
   },
   err => {

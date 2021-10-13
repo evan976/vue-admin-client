@@ -97,8 +97,8 @@ export default {
   methods: {
 
     async getTagData () {
-      const { code, message, data: { tagList } } = await getTagList()
-      this.tagData = tagList
+      const { code, message, result } = await getTagList()
+      this.tagData = result
       requestResultNotify(code, message)
     },
 

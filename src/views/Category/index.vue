@@ -33,8 +33,21 @@
         label="描述">
       </el-table-column>
       <el-table-column
+        prop="count"
+        label="文章数"
+        width="180">
+          <template slot-scope="scope">
+            <el-tag
+              type="success"
+              size="mini"
+              effect="dark">
+              {{scope.row.count}}
+              </el-tag>
+          </template>
+      </el-table-column>
+      <el-table-column
         label="操作"
-        width="160">
+        width="220">
         <template slot-scope="scope">
           <el-tag
             @click="handleClick(scope.row)"
@@ -44,17 +57,17 @@
             hit
           >
             <i class="el-icon-position"></i>
-            宿主页面
+            查看
           </el-tag>
           <el-tag
             type="success"
             size="small"
             effect="plain"
-            @click="showEditCategoryDialog(scope.row)"
+            @click="showEditCategoryDialog(scope.row._id)"
             hit
           >
             <i class="el-icon-edit"></i>
-            编辑分类
+            编辑
           </el-tag>
           <el-tag
             type="danger"
@@ -64,7 +77,7 @@
             hit
           >
             <i class="el-icon-delete"></i>
-            回收站
+            删除
           </el-tag>
         </template>
       </el-table-column>
@@ -114,6 +127,38 @@
             placeholder="请输入分类描述"
           ></el-input>
         </el-form-item>
+        <el-form-item label="扩展" label-width="80px">
+          <div
+            class="category-extends"
+            v-for="(item, index) in categoryModel.extend"
+            :key="index"
+          >
+            <el-input
+              v-model="item.label"
+              class="extend-input"
+              size="small"
+              placeholder="label"
+            ></el-input>
+            <el-input
+              v-model="item.value"
+              class="extend-input"
+              size="small"
+              placeholder="value"
+            ></el-input>
+            <el-button
+              size="small"
+              type="danger"
+              icon="el-icon-delete"
+              @click="categoryModel.extend.splice(index, 1)"
+            ></el-button>
+          </div>
+          <el-button
+            style="width: 100%"
+            size="small"
+            icon="el-icon-plus"
+            @click="categoryModel.extend.push({})"
+          >增加扩展</el-button>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogFormVisible = false">取 消</el-button>
@@ -126,6 +171,7 @@
 <script>
 import {
   getCategoryList,
+  getCategory,
   createCategory,
   updateCategory,
   removeCategory
@@ -139,7 +185,9 @@ export default {
     return {
       id: '',
       categoryData: [],
-      categoryModel: {},
+      categoryModel: {
+        extend: []
+      },
       pagination: {},
       dialogFormVisible: false,
       rules: {
@@ -168,22 +216,27 @@ export default {
     },
 
     async getCategoryData () {
-      const { code, message, data: { categoryList, pagination } } = await getCategoryList()
-      this.categoryData = categoryList
+      const { code, message, result: { data, pagination } } = await getCategoryList()
+      this.categoryData = data
       this.pagination = pagination
       requestResultNotify(code, message)
     },
 
+    async getCategory (id) {
+      const { result } = await getCategory(id)
+      this.categoryModel = result
+      this.id = id
+    },
+
     showAddCategoryDialog () {
       this.dialogFormVisible = true
-      this.categoryModel = {}
+      this.categoryModel = { extend: [] }
       this.id = ''
     },
 
-    showEditCategoryDialog (category) {
+    showEditCategoryDialog (id) {
+      this.getCategory(id)
       this.dialogFormVisible = true
-      this.categoryModel = category
-      this.id = category._id
     },
 
     saveCategory (formName) {
@@ -192,7 +245,6 @@ export default {
         if (!this.id) {
           const { code, message } = await createCategory(this.categoryModel)
           handleResultNotify(code, message)
-          this.categoryModel = {}
 
         } else {
           const { code, message } = await updateCategory(this.id, this.categoryModel)
@@ -219,4 +271,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.category-extends {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .extend-input {
+    margin-right: 10px;
+  }
+}
 </style>

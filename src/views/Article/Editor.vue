@@ -66,21 +66,15 @@
         <div slot="header" class="clearfix">
           <span>标签目录</span>
         </div>
-        <el-select
-          v-if="tagData.length > 0"
-          v-model="articleModel.tags"
-          style="width: 100%"
-          size="small"
-          multiple
-          placeholder="请选择标签"
-        >
-          <el-option
+        <el-checkbox-group v-model="articleModel.tags">
+          <el-checkbox
             v-for="tag in tagData"
             :key="tag._id"
-            :label="tag.name"
-            :value="tag._id"
-          ></el-option>
-        </el-select>
+            :label="tag._id"
+          >
+            {{tag.name}}
+          </el-checkbox>
+        </el-checkbox-group>
       </el-card>
       <el-card class="thumb">
         <div slot="header" class="clearfix">
@@ -177,11 +171,12 @@ export default {
   },
   data () {
     return {
-      action: 'http://localhost:8000/api/private/v1/images/upload',
+      action: 'http://localhost/api/private/v1/qiniu/upload',
       headers: {
         Authorization: null
       },
       articleModel: {
+        tags: [],
         thumb: ''
       },
       tagData: [],
@@ -211,37 +206,32 @@ export default {
     }
   },
 
-  computed: {
-    
-  },
-
   created () {
     this.id && this.getArticleDetail()
     this.initData()
   },
 
   methods: {
-
     beforeUpload () {
       const token = this.$store.state.token
       this.headers.Authorization = `Bearer ${token}`
     },
 
     successUpload (result) {
-      const { code, message, data: { url } } = result
+      const { code, message, result: { url } } = result
       this.articleModel.thumb = url
       handleResultNotify(code, message)
     },
 
     async initData () {
-      const { data: { categoryList } } = await getCategoryList()
-      const { data: { tagList } } = await getTagList()
-      this.categoryData = categoryList
-      this.tagData = tagList
+      const { result: { data } } = await getCategoryList()
+      const { result } = await getTagList()
+      this.categoryData = data
+      this.tagData = result
     },
 
     async getArticleDetail () {
-      const { data: { result } } = await getArticle(this.id)
+      const { result } = await getArticle(this.id)
       this.articleModel = Object.assign({}, this.articleModel, result)
     },
 

@@ -14,7 +14,11 @@ const routes = [
         path: '/dashboard',
         name: 'Dashboard',
         component: () => import('@/views/Dashboard'),
-        meta: { title: '仪表盘', icon: 'el-icon-odometer' }
+        meta: {
+          title: '仪表盘',
+          icon: 'el-icon-odometer',
+          keepAlive: true
+        }
       },
       {
         path: '/article',

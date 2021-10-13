@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     async getSiteOptions () {
-      const { code, message, data: { result }} = await getSiteOptions()
+      const { code, message, result } = await getSiteOptions()
       this.optionsModel = result
       requestResultNotify(code, message)
     },

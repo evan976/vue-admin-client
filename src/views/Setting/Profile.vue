@@ -169,15 +169,15 @@ export default {
     },
 
     successUpload (result) {
-      const { code, message, data: { url } } = result
+      const { code, message, result: { url } } = result
       this.profileModel.gravatar = url
       handleResultNotify(code, message)
     },
 
 
     async getUserInfo () {
-      const { code, message, data: { user } } = await getUserInfo()
-      this.profileModel = user
+      const { code, message, result } = await getUserInfo()
+      this.profileModel = result
       requestResultNotify(code, message)
     },
 

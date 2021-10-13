@@ -52,7 +52,7 @@ export default {
 
   methods: {
     async getImageData () {
-      const { code, message, data: { result } } = await getImageList()
+      const { code, message, result } = await getImageList()
       this.imageData = result
       requestResultNotify(code, message)
     },

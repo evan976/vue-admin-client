@@ -7,7 +7,7 @@
         type="primary"
         size="mini"
         icon="el-icon-plus"
-        @click="$router.push('/article/edit')"
+        @click="$router.push('/article/create')"
       >
         发表文章
       </el-button>
@@ -36,7 +36,7 @@
         <template slot-scope="scope">
           <div class="category">
             <i class="el-icon-folder-opened"></i>
-            {{scope.row.category.name}}
+            {{scope.row.category ? scope.row.category.name : '未分类'}}
           </div>
           <div class="tags">
             <el-tag
@@ -172,8 +172,8 @@ export default {
 
   methods: {
     async getArticleData () {
-      const { code, message, data: { articleList, pagination } } = await getArticleList()
-      this.articleData = articleList
+      const { code, message, result: { data, pagination } } = await getArticleList()
+      this.articleData = data
       this.pagination = pagination
       requestResultNotify(code, message)
     },

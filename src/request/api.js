@@ -7,6 +7,7 @@ export const updateUserInfo = user => put('/users', user)
 
 // category
 export const getCategoryList = () => get('/categories')
+export const getCategory = id => get(`/categories/${id}`)
 export const createCategory = category => post('/categories', category)
 export const updateCategory = (id, category) => put(`/categories/${id}`, category)
 export const removeCategory = id => remove(`/categories/${id}`)
@@ -29,6 +30,6 @@ export const getSiteOptions = () => get('/options')
 export const updateSiteOptions = options => put('/options', options)
 
 // file
-export const getImageList = () => get('/images/list')
-export const uploadImage = () => post('/images/upload')
-export const removeImage = key => remove(`/images/delete/${key}`)
+export const getImageList = () => get('/qiniu')
+export const uploadImage = () => post('/qiniu/upload')
+export const removeImage = key => remove(`/qiniu/${key}`)
