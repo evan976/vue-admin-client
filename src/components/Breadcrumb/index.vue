@@ -1,6 +1,7 @@
 <template>
   <el-breadcrumb class="app-breadcrumb">
-    <el-breadcrumb-item>{{$route.meta.title}}</el-breadcrumb-item>
+    <el-breadcrumb-item :to="{ path: '/' }">仪表盘</el-breadcrumb-item>
+    <el-breadcrumb-item>{{$route.meta.title !== '仪表盘' ? $route.meta.title : ''}}</el-breadcrumb-item>
   </el-breadcrumb>
 </template>
 

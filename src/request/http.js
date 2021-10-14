@@ -2,6 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import qs from 'qs'
 import store from '@/store'
+import { showLoading, hideLoading } from '../utils/loading'
 
 
 if (process.env.NODE_ENV === 'development') {
@@ -16,6 +17,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 axios.interceptors.request.use(
   config => {
+    showLoading()
     const token = store.state.token
     token && (config.headers.Authorization = `Bearer ${token}`)
     return config
@@ -27,6 +29,7 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   res => {
+    hideLoading()
     if (res.status === 200) {
       return Promise.resolve(res)
     } else {
@@ -34,7 +37,7 @@ axios.interceptors.response.use(
     }
   },
   err => {
-    if (err.response.status === -1) {
+    if (err.response.status === 1) {
       Vue.prototype.$notify({
         title: '请求失败',
         message: err.response.data.message,
@@ -45,7 +48,7 @@ axios.interceptors.response.use(
   }
 )
 
-export const get = (url, params) => {
+export const get = (url, params = {}) => {
   return new Promise((resolve, reject) => {
     axios.get(url, { params })
     .then(res => resolve(res.data))

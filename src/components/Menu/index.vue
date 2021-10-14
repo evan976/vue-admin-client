@@ -37,7 +37,7 @@ export default {
   name: 'Menu',
   data () {
     return {
-      menuData: routes[1].children
+      menuData: routes[2].children
     }
   }
 }

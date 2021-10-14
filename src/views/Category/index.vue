@@ -184,6 +184,7 @@ export default {
   data () {
     return {
       id: '',
+      params: {},
       categoryData: [],
       categoryModel: {
         extend: []
@@ -208,15 +209,17 @@ export default {
   methods: {
 
     handleCurrentChange (val) {
-      console.log(val)
+      this.params.offset = val
+      this.getCategoryData(this.params)
     },
 
     handleSizeChange (val) {
-      console.log(val)
+      this.params.limit = val
+      this.getCategoryData(this.params)
     },
 
     async getCategoryData () {
-      const { code, message, result: { data, pagination } } = await getCategoryList()
+      const { code, message, result: { data, pagination } } = await getCategoryList(this.params)
       this.categoryData = data
       this.pagination = pagination
       requestResultNotify(code, message)

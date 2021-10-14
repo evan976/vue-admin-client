@@ -17,7 +17,7 @@
       :key="tag._id"
       closable
       @close="removeTag(tag._id)"
-      @click="showEditDialog(tag)"
+      @click="showEditDialog(tag._id)"
       hit
     >
       <i class="el-icon-price-tag"></i>
@@ -29,21 +29,21 @@
       :visible.sync="dialogFormVisible"
     >
       <el-form :model="tagModel" :rules="rules" ref="ruleForm">
-        <el-form-item label="名称" prop="name" label-width="80px">
+        <el-form-item label="名称" prop="name" label-width="90px">
           <el-input
             v-model="tagModel.name"
             size="small"
             placeholder="请输入标签名称"
           ></el-input>
         </el-form-item>
-        <el-form-item label="别名" prop="slug" label-width="80px">
+        <el-form-item label="别名" prop="slug" label-width="90px">
           <el-input
             v-model="tagModel.slug"
             size="small"
             placeholder="请输入标签别名"
           ></el-input>
         </el-form-item>
-        <el-form-item label="描述" label-width="80px">
+        <el-form-item label="描述" label-width="90px">
           <el-input
             v-model="tagModel.description"
             size="small"
@@ -51,6 +51,38 @@
             :rows="2"
             placeholder="请输入标签描述"
           ></el-input>
+        </el-form-item>
+        <el-form-item label="自定义扩展" label-width="90px">
+          <div
+            class="tag-extends"
+            v-for="(item, index) in tagModel.extend"
+            :key="index"
+          >
+            <el-input
+              v-model="item.label"
+              class="extend-input"
+              size="small"
+              placeholder="label"
+            ></el-input>
+            <el-input
+              v-model="item.value"
+              class="extend-input"
+              size="small"
+              placeholder="value"
+            ></el-input>
+            <el-button
+              size="small"
+              type="danger"
+              icon="el-icon-delete"
+              @click="tagModel.extend.splice(index, 1)"
+            ></el-button>
+          </div>
+          <el-button
+            style="width: 100%"
+            size="small"
+            icon="el-icon-plus"
+            @click="tagModel.extend.push({})"
+          >增加扩展</el-button>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -64,6 +96,7 @@
 <script>
 import {
   getTagList,
+  getTag,
   createTag,
   updateTag,
   removeTag
@@ -77,7 +110,9 @@ export default {
     return {
       id: '',
       tagData: [],
-      tagModel: {},
+      tagModel: {
+        extend: []
+      },
       dialogFormVisible: false,
       rules: {
         name: [
@@ -102,6 +137,23 @@ export default {
       requestResultNotify(code, message)
     },
 
+    async getTag (id) {
+      const { result } = await getTag(id)
+      this.tagModel = result
+      this.id = id
+    },
+
+    async showEditDialog (id) {
+      this.getTag(id)
+      this.dialogFormVisible = true
+    },
+
+    async showAddTagDialog () {
+      this.dialogFormVisible = true
+      this.tagModel = { extend: [] }
+      this.id = ''
+    },
+
     saveTag (formName) {
       this.$refs[formName].validate(async valid => {
         if (!valid) return false
@@ -111,23 +163,10 @@ export default {
         } else {
           const { code, message } = await createTag(this.tagModel)
           handleResultNotify(code, message)
-          this.tagModel = {}
         }
         this.getTagData()
         this.dialogFormVisible = false
       })
-    },
-
-    async showEditDialog (tag) {
-      this.tagModel = tag
-      this.id = tag._id
-      this.dialogFormVisible = true
-    },
-
-    async showAddTagDialog () {
-      this.dialogFormVisible = true
-      this.tagModel = {}
-      this.id = ''
     },
 
     removeTag (id) {
@@ -144,3 +183,14 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.tag-extends {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .extend-input {
+    margin-right: 10px;
+  }
+}
+</style>

@@ -19,6 +19,16 @@
           >
           </el-input>
         </el-form-item>
+        <el-form-item prop="email">
+          <el-input
+            v-model="userModel.email"
+            class="password"
+            size="small"
+            prefix-icon="el-icon-message"
+            placeholder="邮箱"
+          >
+          </el-input>
+        </el-form-item>
         <el-form-item prop="password">
           <el-input
             v-model="userModel.password"
@@ -27,7 +37,17 @@
             type="password"
             prefix-icon="el-icon-lock"
             placeholder="密码"
-            show-password
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="rel_password">
+          <el-input
+            v-model="userModel.rel_password"
+            class="password"
+            size="small"
+            type="password"
+            prefix-icon="el-icon-warning-outline"
+            placeholder="确认密码"
           >
           </el-input>
         </el-form-item>
@@ -36,9 +56,9 @@
             class="login-btn"
             type="primary"
             size="small"
-            @click="login('ruleform')"
+            @click="register('ruleform')"
           >
-            登 录
+            注 册
           </el-button>
         </el-form-item>
       </el-form>
@@ -47,41 +67,40 @@
 </template>
 
 <script>
-import { login } from '@/request/api'
+import { register } from '@/request/api'
 
 export default {
-  name: 'Login',
+  name: 'Register',
   data () {
     return {
       userModel: {},
       rules: {
         username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
-        password: [{ required: true, message: '密码不能为空', trigger: 'blur' }]
+        email: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }],
+        password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
+        rel_password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
       }
     }
   },
   methods: {
-    login (formName) {
+    register (formName) {
       this.$refs[formName].validate(async valid => {
         if (!valid) return false
-        const result = await login(this.userModel)
-        if (result.code === 1) {
+        const { code, message } = await register(this.userModel)
+        if (code === 1) {
           this.$notify({
             title: '操作失败',
-            message: result.message,
-            type: 'error'
+            type: 'error',
+            message
           })
         } else {
-          const { result: { token } } = result
-          this.$store.commit('setToken', token)
           this.$notify({
             title: '操作成功',
-            message: result.message,
-            type: 'success'
+            type: 'success',
+            message
           })
-          setTimeout(() => {
-            this.$router.push('/')
-          }, 2000)
+          this.$router.push('/login')
+          this.userModel = {}
         }
       })
     }
@@ -100,7 +119,7 @@ export default {
   background: url('../../assets/images/bg.svg');
 }
 .login-card {
-  width: 25%;
+  width: 28%;
   color: $white;
   .card-header {
     height: 60px;

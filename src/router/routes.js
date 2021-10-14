@@ -5,6 +5,11 @@ const routes = [
     component: () => import('@/views/Login')
   },
   {
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/views/Register')
+  },
+  {
     path: '/',
     name: 'Layout',
     component: () => import('@/layouts/default.vue'),

@@ -36,7 +36,8 @@ import {
   Link,
   Pagination,
   Tag,
-  MessageBox
+  MessageBox,
+  Backtop
 } from 'element-ui'
 
 Vue.use(Container)
@@ -73,6 +74,7 @@ Vue.use(TabPane)
 Vue.use(Link)
 Vue.use(Pagination)
 Vue.use(Tag)
+Vue.use(Backtop)
 
 Dialog.props.lockScroll.default = false
 Vue.use(Dialog)

@@ -178,6 +178,7 @@ export default {
     async getUserInfo () {
       const { code, message, result } = await getUserInfo()
       this.profileModel = result
+      console.log(result)
       requestResultNotify(code, message)
     },
 
@@ -191,7 +192,7 @@ export default {
       this.$refs[formName].validate(async valid => {
         if (!valid) return false
         const { code, message } = await updateUserInfo(this.passwordModel)
-        if (code === 1) {
+        if (code === 0) {
           this.$notify({
             type: 'success',
             title: '操作成功',

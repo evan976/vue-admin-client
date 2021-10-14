@@ -12,6 +12,10 @@
         发表文章
       </el-button>
     </div>
+    <div class="toolbar">
+      <Search :getArticleData="getArticleData"/>
+    </div>
+    <el-divider />
     <el-table :data="articleData">
       <el-table-column
         prop="id"
@@ -141,7 +145,10 @@
       layout="prev, pager, next"
       :page-size="pagination.limit"
       :current-page="pagination.offset"
-      :total="pagination.total">
+      :total="pagination.total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    >
     </el-pagination>
   </el-card>
 </template>
@@ -150,6 +157,7 @@
 import dayjs from 'dayjs'
 import { getArticleList, removeArticle } from '@/request/api'
 import { requestResultNotify, handleResultNotify } from '@/utils/notify'
+import Search from '@/components/Search'
 
 export default {
   name: 'ArticleList',
@@ -159,20 +167,36 @@ export default {
     }
   },
 
+  components: {
+    Search
+  },
+
   data () {
     return {
+      params: {},
       articleData: [],
       pagination: {}
     }
   },
 
   created () {
-    this.getArticleData()
+    this.getArticleData(this.params)
   },
 
   methods: {
-    async getArticleData () {
-      const { code, message, result: { data, pagination } } = await getArticleList()
+
+    handleSizeChange (val) {
+      this.params.limit = val
+      this.getArticleData(this.params)
+    },
+
+    handleCurrentChange(val) {
+      this.params.offset = val
+      this.getArticleData(this.params)
+    },
+
+    async getArticleData (params) {
+      const { code, message, result: { data, pagination } } = await getArticleList(params)
       this.articleData = data
       this.pagination = pagination
       requestResultNotify(code, message)
