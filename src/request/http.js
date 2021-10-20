@@ -6,7 +6,7 @@ import { showLoading, hideLoading } from '../utils/loading'
 
 
 if (process.env.NODE_ENV === 'development') {
-  axios.defaults.baseURL = 'http://localhost:80/api/private/v1'
+  axios.defaults.baseURL = 'http://localhost:8000/api/private/v1'
 } else if (process.env.NODE_ENV === 'production') {
   axios.defaults.baseURL = 'https://api.evanone.site'
 }

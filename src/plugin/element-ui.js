@@ -27,6 +27,7 @@ import {
   Option,
   Checkbox,
   CheckboxGroup,
+  Switch,
   Upload,
   Image,
   Tabs,
@@ -67,6 +68,7 @@ Vue.use(Select)
 Vue.use(Option)
 Vue.use(Checkbox)
 Vue.use(CheckboxGroup)
+Vue.use(Switch)
 Vue.use(Upload)
 Vue.use(Image)
 Vue.use(Tabs)

@@ -95,6 +95,20 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="hot"
+        label="热门"
+        width="100"
+      >
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.hot"
+            @change="articleHotStateChange(scope.row)"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="created_at"
         label="时间"
         width="260"
@@ -155,7 +169,7 @@
 
 <script>
 import dayjs from 'dayjs'
-import { getArticleList, removeArticle } from '@/request/api'
+import { getArticleList, updateArticle, removeArticle } from '@/request/api'
 import { requestResultNotify, handleResultNotify } from '@/utils/notify'
 import Search from '@/components/Search'
 
@@ -212,6 +226,13 @@ export default {
         handleResultNotify(code, message)
         this.getArticleData()
       })
+    },
+
+    async articleHotStateChange (article) {
+      console.log(article)
+      const { code, message } = await updateArticle(article._id, { hot: article.hot })
+      handleResultNotify(code, message)
+      this.getArticleData()
     }
   }
 }
