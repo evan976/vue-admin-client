@@ -1,8 +1,20 @@
 # vue-admin-client
 
+<img align="center" src="https://raw.githubusercontent.com/wujihua118/vue-admin-client/master/src/screenshots/logo.png" style="zoom:50%;" />
+
 Admin client for my personal blog site, powered by [Vue2](https://cn.vuejs.org/)
 
 个人博客后台管理系统，需要配合服务端代码一起运行，在这 [express-api-server](https://github.com/wujihua118/express-api-server)
+
+## 功能
+
+- 登录 / 注册
+- 文章新增 / 修改 / 查询 / 删除
+- 分类新增 / 修改 / 查询 / 删除
+- 标签新增 / 修改 / 查询 / 删除
+- 图片上传 / 查询
+- 个人信息查询 / 修改
+- ...
 
 ## 技术栈
 
@@ -37,6 +49,26 @@ vue + vue-router + vuex + element-ui + axios + vue-meditor + ES6+
 ```
 
 ## 项目截图
+
+### 首页
+
+<img src="https://raw.githubusercontent.com/wujihua118/vue-admin-client/master/src/screenshots/index.png" />
+
+### 文章
+
+<img src="https://raw.githubusercontent.com/wujihua118/vue-admin-client/master/src/screenshots/article_list.png"  />
+
+### 分类
+
+<img src="https://raw.githubusercontent.com/wujihua118/vue-admin-client/master/src/screenshots/category.png" />
+
+### 标签
+
+![](https://raw.githubusercontent.com/wujihua118/vue-admin-client/master/src/screenshots/tag.png)
+
+### 文件管理
+
+![](https://raw.githubusercontent.com/wujihua118/vue-admin-client/master/src/screenshots/file.png)
 
 ## 构建
 
