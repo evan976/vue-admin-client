@@ -2,12 +2,18 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/Login')
+    component: () => import('@/views/Login'),
+    meta: {
+      title: '登录'
+    }
   },
   {
     path: '/register',
     name: 'Register',
-    component: () => import('@/views/Register')
+    component: () => import('@/views/Register'),
+    meta: {
+      title: '注册'
+    }
   },
   {
     path: '/',
@@ -121,7 +127,10 @@ const routes = [
   {
     path: '*',
     name: 'NotFound',
-    component: () => import('@/views/NotFound')
+    component: () => import('@/views/NotFound'),
+    meta: {
+      title: '404'
+    }
   }
 ]
 
