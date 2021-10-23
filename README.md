@@ -1,7 +1,5 @@
 # vue-admin-client
 
-<img align="center" src="https://raw.githubusercontent.com/wujihua118/vue-admin-client/master/src/screenshots/logo.png" style="zoom:50%;" />
-
 Admin client for my personal blog site, powered by [Vue2](https://cn.vuejs.org/)
 
 个人博客后台管理系统，需要配合服务端代码一起运行，在这 [express-api-server](https://github.com/wujihua118/express-api-server)
