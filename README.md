@@ -1,5 +1,7 @@
 # vue-admin-client
 
+# 正在重构（react + typescript）
+
 Admin client for my personal blog site, powered by [Vue2](https://cn.vuejs.org/)
 
 个人博客后台管理系统，需要配合服务端代码一起运行，在这 [express-api-server](https://github.com/wujihua118/express-api-server)
