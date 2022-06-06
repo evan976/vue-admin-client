@@ -1,6 +1,6 @@
 # vue-admin-client
 
-# 正在重构（react + typescript）
+# 已废弃
 
 Admin client for my personal blog site, powered by [Vue2](https://cn.vuejs.org/)
 
